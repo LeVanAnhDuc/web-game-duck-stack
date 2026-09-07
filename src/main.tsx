@@ -1,6 +1,7 @@
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { I18nProvider } from './i18n'
+import { ScoresProvider } from './scores'
 import { SettingsProvider, useSettings } from './settings'
 import { PlayScreen } from './ui/PlayScreen'
 import './ui/tokens.css'
@@ -22,7 +23,9 @@ function App() {
   }, [settings.locale])
   return (
     <I18nProvider locale={settings.locale}>
-      <PlayScreen />
+      <ScoresProvider>
+        <PlayScreen />
+      </ScoresProvider>
     </I18nProvider>
   )
 }

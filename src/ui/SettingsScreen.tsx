@@ -113,7 +113,14 @@ function Bindings() {
   )
 }
 
-export function SettingsScreen({ onClose }: { onClose: () => void }) {
+export function SettingsScreen({
+  onClose,
+  onFocusFallback,
+}: {
+  onClose: () => void
+  /** Where focus goes when the control that opened this dialog no longer exists. */
+  onFocusFallback?: (() => void) | undefined
+}) {
   const { t, locale } = useI18n()
   const { settings, update, reset, status } = useSettings()
   // Numbers follow the chosen locale, like every other number in the app
@@ -128,8 +135,15 @@ export function SettingsScreen({ onClose }: { onClose: () => void }) {
     returnFocusRef.current = document.activeElement as HTMLElement | null
     closeRef.current?.focus()
     const previous = returnFocusRef.current
-    return () => previous?.focus?.()
-  }, [])
+    return () => {
+      // The paused and game-over modals are hidden in the same commit that mounts
+      // this dialog, so the button that opened it may already be gone -- restoring
+      // focus to a detached node (or to `<body>`) drops a keyboard player at the top
+      // of the tab order instead of where they were.
+      if (previous && previous !== document.body && previous.isConnected) previous.focus()
+      else onFocusFallback?.()
+    }
+  }, [onFocusFallback])
 
   /**
    * Escape closes the dialog, and a Tab off either end wraps.
@@ -182,12 +196,12 @@ export function SettingsScreen({ onClose }: { onClose: () => void }) {
         </div>
 
         {status === 'unavailable' ? (
-          <p className="modal__body" role="status">
+          <p className="modal__body" role="alert">
             {t('settings.storageUnavailable')}
           </p>
         ) : null}
         {status === 'recovered' ? (
-          <p className="modal__body" role="status">
+          <p className="modal__body" role="alert">
             {t('settings.storageRecovered')}
           </p>
         ) : null}

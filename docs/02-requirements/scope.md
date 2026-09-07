@@ -51,9 +51,9 @@ KHÔNG chứa: cách hiện thực, ngưỡng phi chức năng (-> nfr.md), lý 
 | FR-29 | Khôi phục thiết lập về mặc định | US-02 | xong |
 | FR-30 | Lưu thiết lập kèm phiên bản schema và migration | US-02 | xong |
 | FR-31 | Bảng chỉ số cuối lượt (điểm, hàng, cấp độ, thời gian, PPS) | US-03 | xong |
-| FR-32 | Điểm cao cục bộ theo từng chế độ | US-03 | chưa |
-| FR-33 | Hiển thị thời điểm đạt điểm theo locale đang chọn | US-03 | chưa |
-| FR-34 | Định danh cục bộ bằng nickname | US-03 | chưa |
+| FR-32 | Điểm cao cục bộ theo từng chế độ | US-03 | xong |
+| FR-33 | Hiển thị thời điểm đạt điểm theo locale đang chọn | US-03 | xong |
+| FR-34 | Định danh cục bộ bằng nickname | US-03 | xong |
 | FR-35 | Khối rơi mượt dưới mức ô (nội suy `gravityAcc`) | US-01 | xong |
 | FR-36 | Di chuyển ngang có tween ngắn | US-01 | xong |
 | FR-37 | Nháy sáng khi khối chốt | US-01 | xong |
