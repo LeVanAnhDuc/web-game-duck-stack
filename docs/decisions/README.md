@@ -21,6 +21,7 @@
 | [ADR-0011](0011-ci-release-and-pages.md) | CI, release tự động từ commit, và deploy Pages | 2026-09-04 | accepted |
 | [ADR-0012](0012-render-holds-visual-memory.md) | `render/` được giữ bộ nhớ thị giác | 2026-09-04 | accepted |
 | [ADR-0013](0013-settings-schema-and-fall-speed.md) | Thiết lập có schemaVersion, và tốc độ rơi là config của engine | 2026-09-04 | accepted |
+| [ADR-0014](0014-per-difficulty-score-boards-and-local-nickname.md) | Bảng điểm cao tách theo độ khó, nickname là nhãn cục bộ | 2026-09-07 | accepted |
 <!-- END:auto -->
 
 Trạng thái: `accepted` · `superseded by ADR-00xx` · `deprecated`

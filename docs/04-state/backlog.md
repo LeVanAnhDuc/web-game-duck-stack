@@ -20,15 +20,12 @@ KHÔNG chứa: tính năng ngoài phạm vi (-> 01-product/overview.md §Non-Goa
 
 **Không có việc nào đang dở.**
 
-Loạt 4 gói theo yêu cầu đã xong: **A animation** (FR-35→41, ADR-0012, đã merge) và
-**B+C+D settings / âm thanh / độ khó** (FR-17, FR-23→30, FR-42→44, ADR-0013).
+Feature `stats-highscores` đã xong (FR-32 → FR-34, ADR-0014). Với nó thì **44/44 FR
+trong `scope.md` ở trạng thái xong** — hết phần chức năng đã cấp ID.
 
-B, C và D nằm chung một branch dù thứ tự đã chốt là ba đợt: C và D không tồn tại được
-nếu không có màn Settings của B, nên tách branch chỉ tạo thêm hai vòng CI mà không
-tách được rủi ro. Ba commit riêng, một PR.
-
-**Hệ quả phải nhớ:** điểm số giữa các độ khó **không so được với nhau**. Bảng điểm cao
-(FR-32) phải tách theo độ khó, nếu không nó chỉ đo được ai chọn Dễ (ADR-0013 §4).
+**Hệ quả phải nhớ:** bảng điểm tách theo độ khó và **không bao giờ được gộp**
+(ADR-0014 §2a). Nếu sau này thêm mode Sprint/Ultra thì chúng đo bằng *thời gian ngắn
+nhất*, nên `compareEntries` cần một chiều xếp thứ hai — không phải thêm bảng.
 
 ## Việc tiếp theo
 
@@ -36,7 +33,7 @@ tách được rủi ro. Ba commit riêng, một PR.
 | --- | --- | --- | --- |
 | Feature `core-gameplay` | FR-01 → FR-22 | cao | vòng lặp cốt lõi; mọi feature khác phụ thuộc vào engine của nó |
 | Feature `controls-settings` | FR-17 · FR-23 → FR-30 | **cao** | người chơi mục tiêu coi việc chỉnh DAS/ARR là bắt buộc; và FR-17 nợ từ `core-gameplay` phải trả ở đây |
-| Feature `stats-highscores` | FR-32 → FR-34 | trung bình | cần `LocalIdentity` và `ScoreRepository`; FR-31 đã xong ở modal kết thúc lượt |
+| **Đo 4 NFR còn là ngưỡng chọn, chưa phải số đo** | NFR-PERF-01/02/03/05 | **cao** | chúng là ngưỡng duy nhất chưa ai chạy ra con số; NFR-PERF-04 (bundle) thì có đo mỗi lần build. Cần Performance panel + heap snapshot + Lighthouse, không cần code mới |
 | Viết test cho hai script trong `.github/scripts/` | ADR-0011 | thấp | hiện chỉ kiểm bằng cách chạy tay 6 tình huống; chúng quyết định số version nên sai là sai vĩnh viễn |
 | Chế độ Sprint 40 lines và Ultra 2 phút | — | thấp | dùng chung engine, chỉ khác điều kiện kết thúc và chỉ số hiển thị. **Không** phải Non-Goal — cấp FR mới khi làm |
 | Màn hình xem lại replay | FR-18 | thấp | dữ liệu replay đã được ghi từ bản đầu (ADR-0002); chỉ thiếu giao diện |
@@ -53,3 +50,18 @@ tách được rủi ro. Ba commit riêng, một PR.
 | `docs/02-requirements/nfr.md` — NFR-PERF-01, 02, 03, 05 | Bốn ngưỡng vẫn là ngân sách **chưa đo**: frame budget, input latency, cấp phát hot path, thời gian tải | Cần Performance panel, heap snapshot và Lighthouse — mỗi thứ một phiên riêng, và cần một bàn chơi đã xếp cao mới đo có nghĩa | Trước khi tăng độ khó (thêm mode) hoặc khi có báo cáo rớt frame |
 | `src/render/canvas.ts` — `draw()` | Vẽ 200 `fillRect` nền well mỗi frame trước khi blit ô | Đơn giản và đúng; chưa đo thấy vượt ngân sách | Ngay khi `NFR-PERF-01` được đo thật và thiếu ngân sách — cách thay là chỉ vẽ ô đã đổi |
 | `docs/specs/core-gameplay/design.md` §1 vs `plan.md` | `design.md` nói scope là FR-01→FR-22 nhưng `plan.md` không có task cho FR-17 | Phát hiện lúc cập nhật `scope.md`, sau khi code đã xong | Đã trả một nửa: FR-17 chuyển sang feature 3. Bài học: đối chiếu danh sách FR của `design.md` với danh sách task của `plan.md` **trước** khi bắt đầu code |
+
+### Không có test component nào
+
+`package.json` không có `@testing-library/*`; 12 file test hiện chỉ phủ
+`engine/` · `storage/` · `i18n/`. Hệ quả đo được ở feature `stats-highscores`: hai
+review subagent tìm ra 15 lỗi — trong đó có một lỗi xếp điểm vào **bảng độ khó sai**,
+một lỗi làm **trắng cả app** vì một dòng dữ liệu hỏng, một bẫy focus vỡ, và một dialog
+tràn khỏi viewport không bấm được ở khổ điện thoại nằm ngang — mà **toàn bộ 218 test
+vẫn xanh và typecheck vẫn sạch**.
+
+Phần logic thuần đã được khoá lại bằng test (222 test). Phần UI thì hiện chỉ có hai
+lưới an toàn: đọc review, và mở app thật ra xem. Cả hai đều không chạy trong CI.
+
+**Vì sao vẫn hoãn:** thêm `@testing-library` là một quyết định về hạ tầng test, không
+phải một phần của feature này; làm kèm sẽ trộn hai thứ trong một PR.

@@ -1,11 +1,13 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { COLS, VISIBLE_ROWS, type Action, type Kind } from '../engine'
 import { touchHandlers } from '../input/touch'
 import { useI18n, type MessageKey } from '../i18n'
 import { Icon, type IconName } from './Icon'
 import { PiecePreview } from './PiecePreview'
 import { AnimatedNumber, useBumpKey } from './AnimatedNumber'
+import { useScores } from '../scores'
 import { useSettings } from '../settings'
+import { HighScoresScreen } from './HighScoresScreen'
 import { SettingsScreen } from './SettingsScreen'
 import { useGameSession, type HudSnapshot } from './useGameSession'
 
@@ -13,9 +15,9 @@ import { useGameSession, type HudSnapshot } from './useGameSession'
  * The play screen (US-01). Layout follows the approved mockup: mobile 375 first,
  * then rails at 768, then keyboard hints and no touch band at 1024+.
  *
- * The settings and language controls are present but inert -- they are the entry
- * points for FR-23..FR-34, and holding their space now means the layout does not
- * move when those features land.
+ * Every control in the top bar is live: settings (FR-23..FR-30), language (FR-28)
+ * and the high-score table (FR-32..FR-34). Holding their space from the first build
+ * meant the layout did not move when those features landed.
  */
 
 /** Prettier than `event.code`, and short enough for a hint chip. */
@@ -109,10 +111,12 @@ function Queue({ next, cell }: { next: readonly Kind[]; cell: number }) {
 function PausedModal({
   onResume,
   onSettings,
+  onScores,
   onRestart,
 }: {
   onResume: () => void
   onSettings: () => void
+  onScores: () => void
   onRestart: () => void
 }) {
   const { t } = useI18n()
@@ -128,6 +132,9 @@ function PausedModal({
           <button type="button" className="btn btn--secondary" onClick={onSettings}>
             {t('action.settings')}
           </button>
+          <button type="button" className="btn btn--secondary" onClick={onScores}>
+            {t('action.highScores')}
+          </button>
           <button type="button" className="btn btn--danger" onClick={onRestart}>
             {t('action.restart')}
           </button>
@@ -137,9 +144,24 @@ function PausedModal({
   )
 }
 
-function GameOverModal({ hud, onRestart }: { hud: HudSnapshot; onRestart: () => void }) {
+function GameOverModal({
+  hud,
+  onRestart,
+  onScores,
+}: {
+  hud: HudSnapshot
+  onRestart: () => void
+  onScores: () => void
+}) {
   const { t, locale } = useI18n()
   const nf = useMemo(() => new Intl.NumberFormat(locale), [locale])
+  // Two decimals, but through `Intl`: `toFixed` hardcodes a `.`, so the same round
+  // read 1.24 here and 1,24 in the high-score row behind it for a Vietnamese player
+  // (NFR-I18N-03).
+  const ppsFmt = useMemo(
+    () => new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    [locale],
+  )
   return (
     <div className="overlay" role="dialog" aria-modal="true" aria-label={t('modal.gameOver')}>
       <div className="modal">
@@ -152,14 +174,14 @@ function GameOverModal({ hud, onRestart }: { hud: HudSnapshot; onRestart: () => 
           <Stat labelKey="hud.lines" value={nf.format(hud.lines)} />
           <Stat labelKey="hud.level" value={nf.format(hud.level)} />
           <Stat labelKey="hud.time" value={clock(hud.seconds)} />
-          <Stat labelKey="hud.pps" value={hud.pps.toFixed(2)} />
+          <Stat labelKey="hud.pps" value={ppsFmt.format(hud.pps)} />
         </div>
         <div className="modal__actions">
           <button type="button" className="btn btn--primary" onClick={onRestart} autoFocus>
             <Icon name="restart" size={18} />
             {t('action.playAgain')}
           </button>
-          <button type="button" className="btn btn--secondary" aria-disabled="true" title={t('notReady.body')}>
+          <button type="button" className="btn btn--secondary" onClick={onScores}>
             {t('action.highScores')}
           </button>
         </div>
@@ -171,16 +193,61 @@ function GameOverModal({ hud, onRestart }: { hud: HudSnapshot; onRestart: () => 
 export function PlayScreen() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
-  // The game gives the keyboard up while the dialog is open, so its sliders and
-  // buttons work (NFR-A11Y-02).
-  const { hud, send, press, restart, livePhase } = useGameSession(canvasRef, !settingsOpen)
+  const [scoresOpen, setScoresOpen] = useState(false)
+  const anyDialogOpen = settingsOpen || scoresOpen
+  // The game gives the keyboard up while a dialog is open, so its sliders, buttons
+  // and the nickname field work (NFR-A11Y-02).
+  const { hud, send, press, restart, livePhase } = useGameSession(canvasRef, !anyDialogOpen)
   const { t, locale } = useI18n()
   // Memoised: building an Intl formatter is not free, and this component now
   // re-renders on every HUD publish.
   const nf = useMemo(() => new Intl.NumberFormat(locale), [locale])
+  // Two decimals, but through `Intl`: `toFixed` hardcodes a `.`, so the same round
+  // read 1.24 here and 1,24 in the high-score row behind it for a Vietnamese player
+  // (NFR-I18N-03).
+  const ppsFmt = useMemo(
+    () => new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    [locale],
+  )
   const fmt = useCallback((n: number) => nf.format(n), [nf])
 
   const { settings } = useSettings()
+  const { submit } = useScores()
+
+  /**
+   * Record the round EXACTLY once (FR-32).
+   *
+   * Keyed on `hud.runId`, not on the phase: the HUD is republished about ten times a
+   * second and StrictMode invokes this effect twice, so a phase-only condition writes
+   * the same round to the table repeatedly. The ref survives both invocations because
+   * it belongs to the component instance, not to the effect.
+   */
+  /**
+   * The two top-bar buttons, as the place focus lands when a dialog closes and the
+   * control that opened it is gone -- which is every time one is opened from the
+   * paused or game-over modal, because those unmount as the dialog mounts.
+   */
+  const trophyRef = useRef<HTMLButtonElement | null>(null)
+  const settingsBtnRef = useRef<HTMLButtonElement | null>(null)
+  const focusTrophy = useCallback(() => trophyRef.current?.focus(), [])
+  const focusSettings = useCallback(() => settingsBtnRef.current?.focus(), [])
+
+  const savedRunRef = useRef(0)
+  useEffect(() => {
+    if (hud.phase !== 'gameOver' || hud.runId === savedRunRef.current) return
+    savedRunRef.current = hud.runId
+    // Board and speed come from the SNAPSHOT, not from live settings: the round's
+    // gravity was frozen when it started, so changing difficulty mid-round must not
+    // change which board the finished round lands in.
+    submit(hud.bucket, {
+      score: hud.score,
+      lines: hud.lines,
+      level: hud.level,
+      seconds: hud.seconds,
+      pps: hud.pps,
+      cellsPerSecond: hud.cellsPerSecond,
+    })
+  }, [hud, submit])
 
   /** First key bound to an action, for the hint bar. */
   const keyFor = useCallback(
@@ -205,6 +272,13 @@ export function PlayScreen() {
     const phase = livePhase()
     if (phase !== 'paused' && phase !== 'gameOver') press('pause')
     setSettingsOpen(true)
+  }, [livePhase, press])
+
+  /** Same rule as settings: reading a table while pieces fall is a trap. */
+  const openScores = useCallback(() => {
+    const phase = livePhase()
+    if (phase !== 'paused' && phase !== 'gameOver') press('pause')
+    setScoresOpen(true)
   }, [livePhase, press])
 
   // The level flashes once when it changes. The score counts up inside
@@ -243,7 +317,22 @@ export function PlayScreen() {
           </span>
         </div>
 
-        <button type="button" className="icon-btn" aria-label={t('action.settings')} onClick={openSettings}>
+        <button
+          ref={trophyRef}
+          type="button"
+          className="icon-btn"
+          aria-label={t('action.highScores')}
+          onClick={openScores}
+        >
+          <Icon name="trophy" />
+        </button>
+        <button
+          ref={settingsBtnRef}
+          type="button"
+          className="icon-btn"
+          aria-label={t('action.settings')}
+          onClick={openSettings}
+        >
           <Icon name="sliders" />
         </button>
         <button
@@ -281,7 +370,7 @@ export function PlayScreen() {
           </div>
           <div className="statlist">
             <Stat labelKey="hud.time" value={clock(hud.seconds)} />
-            <Stat labelKey="hud.pps" value={hud.pps.toFixed(2)} />
+            <Stat labelKey="hud.pps" value={ppsFmt.format(hud.pps)} />
             {hud.b2b ? <Stat labelKey="hud.b2b" value="×" /> : null}
             {hud.combo > 0 ? <Stat labelKey="hud.combo" value={`×${hud.combo}`} /> : null}
           </div>
@@ -328,11 +417,36 @@ export function PlayScreen() {
         <Hint keys={keyFor('pause')} whatKey="hint.pause" />
       </footer>
 
-      {settingsOpen ? <SettingsScreen onClose={() => setSettingsOpen(false)} /> : null}
-      {paused && !settingsOpen ? (
-        <PausedModal onResume={() => press('pause')} onSettings={openSettings} onRestart={restart} />
+      {settingsOpen ? (
+        <SettingsScreen onClose={() => setSettingsOpen(false)} onFocusFallback={focusSettings} />
       ) : null}
-      {over && !settingsOpen ? <GameOverModal hud={hud} onRestart={restart} /> : null}
+      {scoresOpen ? (
+        <HighScoresScreen
+          onClose={() => setScoresOpen(false)}
+          onFocusFallback={focusTrophy}
+          // Only offered from a finished round: "play again" mid-pause would throw
+          // away a game the player was still in.
+          onRestart={
+            over
+              ? () => {
+                  setScoresOpen(false)
+                  restart()
+                }
+              : undefined
+          }
+        />
+      ) : null}
+      {paused && !anyDialogOpen ? (
+        <PausedModal
+          onResume={() => press('pause')}
+          onSettings={openSettings}
+          onScores={openScores}
+          onRestart={restart}
+        />
+      ) : null}
+      {over && !anyDialogOpen ? (
+        <GameOverModal hud={hud} onRestart={restart} onScores={openScores} />
+      ) : null}
     </div>
   )
 }

@@ -11,6 +11,9 @@ function memory(initial?: string): StorageLike & { data: Map<string, string> } {
     setItem: (k, v) => {
       data.set(k, v)
     },
+    removeItem: (k) => {
+      data.delete(k)
+    },
   }
 }
 
@@ -19,6 +22,9 @@ const throwing = (): StorageLike => ({
     throw new DOMException('denied')
   },
   setItem() {
+    throw new DOMException('quota')
+  },
+  removeItem() {
     throw new DOMException('quota')
   },
 })

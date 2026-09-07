@@ -28,9 +28,14 @@ export interface SettingsRepository {
 export interface StorageLike {
   getItem(key: string): string | null
   setItem(key: string, value: string): void
+  removeItem(key: string): void
 }
 
-function browserStorage(): StorageLike | null {
+/**
+ * Shared by every repository in this folder, so the "is storage usable at all" probe
+ * happens once and in one place.
+ */
+export function browserStorage(): StorageLike | null {
   try {
     // Touching `localStorage` at all can throw, so the probe is inside the try.
     const s = globalThis.localStorage

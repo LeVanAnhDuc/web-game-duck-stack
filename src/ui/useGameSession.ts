@@ -6,6 +6,7 @@ import { createBoardRenderer } from '../render/canvas'
 import { createEffects } from '../render/effects'
 import { createLoop } from '../runtime/loop'
 import { createSession } from '../runtime/session'
+import { bucketOf, type Bucket } from '../scores/types'
 import { settingsToConfig, useSettings } from '../settings'
 
 /**
@@ -22,6 +23,27 @@ import { settingsToConfig, useSettings } from '../settings'
 const HUD_EVERY_TICKS = 6
 
 export interface HudSnapshot {
+  /**
+   * Which round this snapshot belongs to, counting up from 1.
+   *
+   * It exists so a round can be recorded EXACTLY once. The HUD is republished about
+   * ten times a second and React invokes effects twice under StrictMode, so
+   * "save when the phase is gameOver" saves the same round repeatedly. A consumer
+   * remembers the last `runId` it saved instead.
+   */
+  runId: number
+  /**
+   * Which high-score board this round belongs in, and the fall speed it actually ran
+   * at -- both captured when the round STARTED.
+   *
+   * They travel with the snapshot rather than being read from settings at save time
+   * because a round's gravity is frozen when its session is built (ADR-0013), while
+   * settings change live. Reading live settings filed an Easy round in the Hard
+   * board the moment a player paused mid-round to change difficulty -- exactly the
+   * cross-difficulty mixing ADR-0014 §2a exists to prevent.
+   */
+  bucket: Bucket
+  cellsPerSecond: number | null
   score: number
   lines: number
   level: number
@@ -36,6 +58,9 @@ export interface HudSnapshot {
 }
 
 const EMPTY_HUD: HudSnapshot = {
+  runId: 0,
+  bucket: 'normal',
+  cellsPerSecond: null,
   score: 0,
   lines: 0,
   level: 1,
@@ -68,6 +93,19 @@ export function useGameSession(
   keyboardEnabledRef.current = keyboardEnabled
   /** Live phase, for callers that must not act on a HUD snapshot up to 100ms old. */
   const phaseRef = useRef<Phase>('playing')
+  /**
+   * Counts rounds across the whole mount, not just the current session object.
+   *
+   * A ref rather than state: bumping state here would re-render mid-round for no
+   * visible reason, and the value has to survive the effect being rebuilt (which
+   * happens when the first settings load finishes) without restarting the count.
+   */
+  const runIdRef = useRef(0)
+  /** Captured at the start of each round, alongside `runIdRef`. */
+  const runBucketRef = useRef<{ bucket: Bucket; cellsPerSecond: number | null }>({
+    bucket: 'normal',
+    cellsPerSecond: null,
+  })
 
   useEffect(() => {
     const canvas: HTMLCanvasElement | null = canvasRef.current
@@ -90,10 +128,26 @@ export function useGameSession(
      // changing the fall speed mid-game would make the replay describe something
      // that never happened (ADR-0013). The settings screen pauses, so the natural
      // moment to adopt them is the next round.
+    /**
+     * One place that both starts the count and freezes what the round is playing
+     * under -- the two must never drift apart, which is what a single function
+     * called from both entry points buys.
+     */
+    function beginRun(): void {
+      runIdRef.current++
+      const s = settingsRef.current
+      runBucketRef.current = {
+        bucket: bucketOf(s),
+        cellsPerSecond: s.difficulty === 'custom' ? s.customCellsPerSecond : null,
+      }
+    }
+
     const session = createSession(Date.now() >>> 0, settingsToConfig(settingsRef.current))
+    beginRun()
     sendRef.current = session.send
     restartRef.current = () => {
       session.restart(Date.now() >>> 0, settingsToConfig(settingsRef.current))
+      beginRun()
       publish(true)
     }
 
@@ -107,6 +161,9 @@ export function useGameSession(
       const s = session.state
       const seconds = s.stats.playTicks / TICK_HZ
       setHud({
+        runId: runIdRef.current,
+        bucket: runBucketRef.current.bucket,
+        cellsPerSecond: runBucketRef.current.cellsPerSecond,
         score: s.stats.score,
         lines: s.stats.lines,
         level: s.stats.level,

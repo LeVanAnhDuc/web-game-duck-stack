@@ -277,6 +277,36 @@ playfield is always 1:2. The layout adapts around a 1:2 box; the box never disto
 
 ## §7 Component specs — dark, single theme
 
+### Capped dialogs: only the scrolling area gives up height
+
+A dialog with `max-height` is a flex column, and flex children shrink by default — so
+content taller than the cap squeezes **every** child proportionally. Measured on the
+high-score dialog at 1396×581: the difficulty selector collapsed to 10px around its
+44px buttons, clipping the labels away entirely, and the list was left 128px tall
+holding 513px of rows. Tests and typecheck said nothing.
+
+The fix is **not** to cap the dialog. Capping the dialog while forbidding its
+children to shrink pushes the overflow outside the panel: measured at 667×375 (a
+landscape phone) the action row landed at y 409–505 — outside the box and below the
+viewport, with the overlay set to `overflow: visible`, so a touch user with no Escape
+key could not close the dialog or press anything in it. Cap the **scrolling region**
+and let the overlay scroll:
+
+```css
+.overlay       { overflow-y: auto; }                  /* a dialog may exceed the screen */
+.modal         { margin: auto; }                      /* centring that survives overflow */
+.modal > *     { flex: 0 0 auto; }                    /* furniture keeps its height */
+.modal__scroll { flex: 1 1 auto; min-height: 128px; max-height: 52vh; }
+```
+
+`margin: auto` rather than the overlay's `align-items: center`, because centring by
+alignment clips the top of an over-tall child inside a scroll container.
+
+The corollary decides what goes where: anything secondary belongs **inside** the
+scrolling area, not in the fixed chrome. Moving the nickname field in gave the list
+back 170px at 375.
+
+
 ```css
 /* Primary action — achromatic fill */
 .btn-primary {

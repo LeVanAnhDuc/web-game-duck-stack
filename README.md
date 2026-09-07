@@ -29,6 +29,8 @@ against how it looks on screen.
   is not enough.
 - Sound effects, synthesised rather than shipped as files, with their own mute and
   volume.
+- A local high-score table, kept per difficulty because scores from different fall
+  speeds are not comparable, with a display name and timestamps in your own language.
 - Motion that reads as motion: pieces fall sub-cell rather than stepping a whole row
   at a time, sideways moves travel, a hard drop leaves a trail, a completed row
   flashes before the stack collapses onto it, and a tetris shakes the board. All of
