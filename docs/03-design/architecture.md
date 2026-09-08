@@ -23,7 +23,7 @@ schema chi tiết (-> file schema của ORM), danh sách chức năng (-> 02-req
 
 ```mermaid
 graph LR
-  Player[Người chơi] --> App[web-game-tetris<br/>chạy trong browser]
+  Player[Người chơi] --> App[Duck Stack<br/>chạy trong browser]
   App --> LS[(localStorage<br/>của browser)]
   App -.- Pages[GitHub Pages<br/>chỉ phục vụ file tĩnh]
   App -. "chưa nối — ADR-0004" .-> Ducker[Ducker ID<br/>IdP của ecosystem]

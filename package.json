@@ -1,9 +1,9 @@
 {
-  "name": "web-game-tetris",
+  "name": "web-game-duck-stack",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Modern Guideline Tetris (SRS, 7-bag, hold, lock delay, T-spin) - client-only, deterministic engine",
+  "description": "Duck Stack - modern Guideline Tetris (SRS, 7-bag, hold, lock delay, T-spin) - client-only, deterministic engine",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

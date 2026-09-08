@@ -19,8 +19,8 @@ KHÔNG chứa: danh sách tính năng (-> 02-requirements/scope.md), ngưỡng k
 
 ## 1. Một câu định vị
 
-Tetris đúng chuẩn Modern Guideline chạy hoàn toàn trong browser, cho người chơi đã
-quen cảm giác điều khiển của Tetr.io/Jstris — không cài đặt, không đăng nhập, không
+Duck Stack là bản Tetris đúng chuẩn Modern Guideline chạy hoàn toàn trong browser,
+cho người chơi đã quen cảm giác điều khiển của Tetr.io/Jstris — không cài đặt, không đăng nhập, không
 cần mạng sau lần tải đầu.
 
 ## 2. Vấn đề đang giải

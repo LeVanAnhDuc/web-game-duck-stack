@@ -1,11 +1,11 @@
-# 🟦 Tetris — the modern Guideline, kick tables and all
+# 🟦 Duck Stack — the modern Tetris Guideline, kick tables and all
 
-[![CI](https://github.com/LeVanAnhDuc/web-game-tetris/actions/workflows/ci.yml/badge.svg)](https://github.com/LeVanAnhDuc/web-game-tetris/actions/workflows/ci.yml)
-[![Deploy](https://github.com/LeVanAnhDuc/web-game-tetris/actions/workflows/deploy.yml/badge.svg)](https://github.com/LeVanAnhDuc/web-game-tetris/actions/workflows/deploy.yml)
-[![Release](https://img.shields.io/github/v/release/LeVanAnhDuc/web-game-tetris?sort=semver)](https://github.com/LeVanAnhDuc/web-game-tetris/releases)
+[![CI](https://github.com/LeVanAnhDuc/web-game-duck-stack/actions/workflows/ci.yml/badge.svg)](https://github.com/LeVanAnhDuc/web-game-duck-stack/actions/workflows/ci.yml)
+[![Deploy](https://github.com/LeVanAnhDuc/web-game-duck-stack/actions/workflows/deploy.yml/badge.svg)](https://github.com/LeVanAnhDuc/web-game-duck-stack/actions/workflows/deploy.yml)
+[![Release](https://img.shields.io/github/v/release/LeVanAnhDuc/web-game-duck-stack?sort=semver)](https://github.com/LeVanAnhDuc/web-game-duck-stack/releases)
 
-Tetris on the modern Guideline, running entirely in the browser. No backend, no
-account, no install — open the page and play.
+Duck Stack is Tetris on the modern Guideline, running entirely in the browser. No
+backend, no account, no install — open the page and play.
 
 Built for players who already have Guideline reflexes: full SRS with wall kicks,
 7-bag, hold, ghost piece, lock delay with move reset, T-spin, combo and
@@ -14,9 +14,9 @@ that feels right and one that feels broken, so the rules live in a pure,
 deterministic engine that is tested against the published kick tables rather than
 against how it looks on screen.
 
-**Play**: https://levananhduc.github.io/web-game-tetris/
+**Play**: https://levananhduc.github.io/web-game-duck-stack/
 
-![Tetris gameplay](docs/assets/screenshot.png)
+![Duck Stack gameplay](docs/assets/screenshot.png)
 
 ## Features
 
@@ -96,7 +96,7 @@ validation possible later without writing the rules a second time.
 
 Every push to `main` creates a GitHub Release by itself
 ([`.github/workflows/release.yml`](.github/workflows/release.yml)), and deploys to
-**<https://levananhduc.github.io/web-game-tetris/>**
+**<https://levananhduc.github.io/web-game-duck-stack/>**
 ([`deploy.yml`](.github/workflows/deploy.yml)). Pull requests run tests, a build and
 an audit first ([`ci.yml`](.github/workflows/ci.yml)).
 

@@ -18,6 +18,22 @@ KHÔNG chứa: tính năng ngoài phạm vi (-> 01-product/overview.md §Non-Goa
 
 ## Đang làm
 
+**Đổi thương hiệu sang `Duck Stack`** (2026-09-08). Repo GitHub đổi từ
+`web-game-tetris` thành `web-game-duck-stack`; GitHub redirect URL *repo* cũ nhưng
+**không** redirect đường dẫn Pages cũ — địa chỉ chơi giờ là
+<https://levananhduc.github.io/web-game-duck-stack/>. **Thư mục local vẫn là**
+`web-game-tetris` — thương hiệu đổi, đường dẫn không.
+
+Hai lý do, và lý do thứ hai quan trọng hơn: cả họ game dùng dạng `Duck X`, **và**
+"Tetris" là nhãn hiệu của The Tetris Company, vốn thực thi rất mạnh với các bản clone
+trên web. Lấy nguyên tên đó làm tiêu đề sản phẩm là rủi ro không cần thiết.
+
+Từ "tetris" ở chỗ nói về *luật và thuật ngữ* được giữ nguyên — một lần ăn 4 hàng vẫn
+gọi là "a tetris" (`src/audio`, `stats.tetrises`, `scoring.ts`, các test), và
+"Modern Guideline"/"Tetris Guideline" vẫn là tên chuẩn luật đang theo. Khoá
+`localStorage` (`tetris.settings.v1`, `tetris.scores.v1`, `tetris.identity.v1`)
+**không** đổi: đổi là xoá sạch điểm cao và cài đặt của người đang chơi.
+
 **Không có việc nào đang dở.**
 
 Feature `stats-highscores` đã xong (FR-32 → FR-34, ADR-0014). Với nó thì **44/44 FR
