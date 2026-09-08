@@ -109,23 +109,29 @@ gh api -X POST repos/<owner>/<repo>/pages -f build_type=workflow
 ```
 
 **The version comes from your commit subjects**, so they have to follow Conventional
-Commits. The whole range since the previous tag is scanned, so one `feat:` anywhere
-in a push is enough for a minor bump — the merge commit's own subject does not need a
-prefix.
+Commits — enforced by [`.githooks/commit-msg`](.githooks/commit-msg) locally and by
+[`commit-lint.yml`](.github/workflows/commit-lint.yml) on every pull request.
+
+[git-cliff](https://git-cliff.org) reads **every commit since the previous tag**, not
+just the last one, and the highest bump wins regardless of order. So one `feat:`
+anywhere in a push is enough for a minor bump, and the merge commit's own subject does
+not need a prefix — merging a pull request and pushing directly give the same answer,
+because commits are read rather than pull requests.
 
 | In the range since the last tag | Bump |
 | --- | --- |
 | `feat:` | minor — `v0.4.0` → `v0.5.0` |
-| `fix:` · `docs:` · `chore:` · `ci:` · `refactor:` · `test:` · `perf:` | patch — `v0.4.0` → `v0.4.1` |
-| `feat!:` (any `type!:`) or a `BREAKING CHANGE` footer | see the 0.x rule below |
+| everything else | patch — `v0.4.0` → `v0.4.1` |
+| `type!:` or a `BREAKING CHANGE` footer | see the 0.x rule below |
 
 **The 0.x rule:** while the major version is `0`, a breaking change bumps the
-**minor**, not the major. Nothing is stable before 1.0, and `1.0.0` is a claim about
-completeness — so crossing to it takes the explicit marker rather than happening on
-its own. The first release of this repo was `v0.1.0` for the same reason.
+**minor**, not the major (`breaking_always_bump_major = false` in
+[`cliff.toml`](cliff.toml)). Nothing is stable before 1.0, and `1.0.0` is a claim
+about completeness — so crossing to it takes the explicit marker rather than happening
+on its own. The first release of this repo was `v0.1.0` for the same reason.
 
-Three markers, honoured **only in the HEAD commit subject** (not in bodies — the
-bodies here run long and discuss releases, which would otherwise trigger them):
+Three markers, read from **commit subjects across the whole range** (not from bodies —
+the bodies here run long and discuss releases, which would otherwise trigger them):
 
 - `[release minor]` / `[release major]` — force a bigger bump. `[release major]` is
   the only way to reach `1.0.0`.
@@ -133,15 +139,21 @@ bodies here run long and discuss releases, which would otherwise trigger them):
   would be noise. Never use it on a push that also carries a `feat:`, or you cancel
   that feature's release too.
 
-**The notes are composed from the commit subjects**, grouped by type, breaking
-changes first — see [`release-notes.sh`](.github/scripts/release-notes.sh). Not from
-`--generate-notes`, which lists merged pull requests and therefore says nothing at all
-when a push was direct commits. Both scripts run locally, so you can see what a
-release will say before it says it:
+Earlier versions of this workflow read the markers from **HEAD's subject alone**. With
+a pull-request flow that subject is always `Merge pull request #N from …`, written by
+GitHub, so no marker was ever reachable. They are read from the range now.
+
+**The notes are composed from the commit subjects**, grouped by type with breaking
+changes first — the groups live in [`cliff.toml`](cliff.toml), which is also the single
+source of truth for which types the commit hook accepts. Not from `--generate-notes`,
+which lists merged pull requests and therefore says nothing at all when a push was
+direct commits.
+
+Both halves run locally, so you can see what a release will say before it says it:
 
 ```bash
-bash .github/scripts/next-version.sh
-bash .github/scripts/release-notes.sh v0.2.0 v0.1.0
+npm run release:next     # which tag the next release would get
+npm run release:notes    # what its notes would say
 ```
 
 **The README is not automated.** Any `feat:` that changes what a player can do must
