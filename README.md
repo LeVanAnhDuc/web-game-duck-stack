@@ -1,4 +1,8 @@
-# web-game-tetris
+# 🟦 Tetris — the modern Guideline, kick tables and all
+
+[![CI](https://github.com/LeVanAnhDuc/web-game-tetris/actions/workflows/ci.yml/badge.svg)](https://github.com/LeVanAnhDuc/web-game-tetris/actions/workflows/ci.yml)
+[![Deploy](https://github.com/LeVanAnhDuc/web-game-tetris/actions/workflows/deploy.yml/badge.svg)](https://github.com/LeVanAnhDuc/web-game-tetris/actions/workflows/deploy.yml)
+[![Release](https://img.shields.io/github/v/release/LeVanAnhDuc/web-game-tetris?sort=semver)](https://github.com/LeVanAnhDuc/web-game-tetris/releases)
 
 Tetris on the modern Guideline, running entirely in the browser. No backend, no
 account, no install — open the page and play.
@@ -9,6 +13,10 @@ back-to-back. Getting one of those details wrong is the difference between a Tet
 that feels right and one that feels broken, so the rules live in a pure,
 deterministic engine that is tested against the published kick tables rather than
 against how it looks on screen.
+
+**Play**: https://levananhduc.github.io/web-game-tetris/
+
+![Tetris gameplay](docs/assets/screenshot.png)
 
 ## Features
 
@@ -36,7 +44,24 @@ against how it looks on screen.
   flashes before the stack collapses onto it, and a tetris shakes the board. All of
   it collapses to instant state changes under `prefers-reduced-motion`.
 
-## Running it
+## Controls
+
+Read off the bar the game itself shows at the bottom of the screen, so the two can
+never drift apart.
+
+| Action     | Keys        |
+| ---------- | ----------- |
+| Move       | `←` `→`     |
+| Soft drop  | `↓`         |
+| Hard drop  | `Space`     |
+| Rotate     | `Z` / `X`   |
+| Hold       | `Shift`     |
+| Pause      | `Esc`       |
+
+DAS and ARR are adjustable in settings: a player with Guideline reflexes treats
+those two numbers as part of the controls, not as a preference.
+
+## Commands
 
 ```bash
 npm ci
@@ -50,6 +75,22 @@ npm run preview    # serve the production build
 Uses **npm**, not Yarn (ADR-0001). No environment variables are needed — see
 [`.env.example`](.env.example) for why that is the correct answer rather than an
 omission.
+
+## How it is put together
+
+| Folder | Holds |
+| --- | --- |
+| `src/engine/` | Every rule, as pure functions. No DOM, no clock, no `Math.random` |
+| `src/runtime/` | The fixed-timestep loop, the round lifecycle, replay recording |
+| `src/input/` | Keyboard and touch, reporting presses and releases only |
+| `src/render/` | Canvas renderer and its pre-rendered cell sprites |
+| `src/i18n/` | Two flat locale files and a `t()` |
+| `src/ui/` | React: screens, HUD, modals |
+
+The engine is deterministic on purpose: a whole game is described by a seed plus the
+commands and the ticks they arrived on. That is what makes replays reproducible, what
+turns a rules bug into a file instead of a story, and what keeps server-side score
+validation possible later without writing the rules a second time.
 
 ## Releases and versioning
 
@@ -107,22 +148,6 @@ bash .github/scripts/release-notes.sh v0.2.0 v0.1.0
 update the `## Features` section above **in the same branch**, in the existing style —
 one short English bullet. A README-only sync uses `docs:`, and never carries
 `[skip release]`.
-
-## How it is put together
-
-| Folder | Holds |
-| --- | --- |
-| `src/engine/` | Every rule, as pure functions. No DOM, no clock, no `Math.random` |
-| `src/runtime/` | The fixed-timestep loop, the round lifecycle, replay recording |
-| `src/input/` | Keyboard and touch, reporting presses and releases only |
-| `src/render/` | Canvas renderer and its pre-rendered cell sprites |
-| `src/i18n/` | Two flat locale files and a `t()` |
-| `src/ui/` | React: screens, HUD, modals |
-
-The engine is deterministic on purpose: a whole game is described by a seed plus the
-commands and the ticks they arrived on. That is what makes replays reproducible, what
-turns a rules bug into a file instead of a story, and what keeps server-side score
-validation possible later without writing the rules a second time.
 
 ## Documentation
 
