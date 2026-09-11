@@ -23,6 +23,7 @@
 | [ADR-0013](0013-settings-schema-and-fall-speed.md) | Thiết lập có schemaVersion, và tốc độ rơi là config của engine | 2026-09-04 | accepted |
 | [ADR-0014](0014-per-difficulty-score-boards-and-local-nickname.md) | Bảng điểm cao tách theo độ khó, nickname là nhãn cục bộ | 2026-09-07 | accepted |
 | [ADR-0015](0015-nhan-bo-quy-uoc-view-dung-chung.md) | Nhận bộ quy ước view dùng chung của workspace `web-game` | 2026-09-11 | accepted |
+| [ADR-0016](0016-review-ux-bang-persona-mo-phong.md) | Review UX bằng dàn persona mô phỏng, cài từ máy phát ở workspace | 2026-09-12 | accepted |
 <!-- END:auto -->
 
 Trạng thái: `accepted` · `superseded by ADR-00xx` · `deprecated`

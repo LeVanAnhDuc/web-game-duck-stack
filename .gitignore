@@ -19,7 +19,15 @@ coverage/
 !/.claude/settings.local.json
 !/.claude/skills/
 !/.claude/scripts/
+# Agent cua skill ux-persona-review. Skill duoc commit ma agent thi khong la skill
+# chay khong duoc tren mot clone moi hoac trong worktree: Claude Code bao khong tim
+# thay agent type, va khong co cach nao sinh lai tu trong repo nay.
+!/.claude/agents/
 
 # Repo nay dung npm (package-lock.json). Mot yarn.lock lot vao la hai lockfile
 # trong mot repo: CI cai bang mot cai, nguoi dev cai bang cai kia.
 yarn.lock
+
+# Rac cua playwright MCP: snapshot a11y tree + anh tam moi lan lai trinh duyet.
+# Sinh ra khi chay skill ux-persona-review, khong phai mot phan cua san pham.
+/.playwright-mcp/

@@ -34,7 +34,15 @@ gọi là "a tetris" (`src/audio`, `stats.tetrises`, `scoring.ts`, các test), v
 `localStorage` (`tetris.settings.v1`, `tetris.scores.v1`, `tetris.identity.v1`)
 **không** đổi: đổi là xoá sạch điểm cao và cài đặt của người đang chơi.
 
-**Không có việc nào đang dở.**
+**Cài skill `ux-persona-review`** (2026-09-12, ADR-0016). Sinh từ máy phát dùng chung
+`D:/Learn/web-app-ecosystem/.claude/skills/ux-persona-lab`. Đã có: `SKILL.md` đã điền,
+`references/red-routes.md` (10 `live` + 3 `planned`, **đã được người dùng duyệt** —
+đây là cổng thủ công duy nhất của skill), `references/personas/` (6 người, cố định),
+`references/persona-rules.md` (fetch 2026-09-12). `.gitignore` mở ignore cho
+`.claude/agents/` để hai agent đi theo repo.
+
+**Chưa chạy lần nào.** Lần chạy đầu cần khởi động lại phiên Claude Code trước — file
+`.claude/agents/*.md` không được nạp nóng. Không có việc nào khác đang dở.
 
 Feature `stats-highscores` đã xong (FR-32 → FR-34, ADR-0014). Với nó thì **44/44 FR
 trong `scope.md` ở trạng thái xong** — hết phần chức năng đã cấp ID.
@@ -85,8 +93,11 @@ một lỗi làm **trắng cả app** vì một dòng dữ liệu hỏng, một 
 tràn khỏi viewport không bấm được ở khổ điện thoại nằm ngang — mà **toàn bộ 218 test
 vẫn xanh và typecheck vẫn sạch**.
 
-Phần logic thuần đã được khoá lại bằng test (222 test). Phần UI thì hiện chỉ có hai
-lưới an toàn: đọc review, và mở app thật ra xem. Cả hai đều không chạy trong CI.
+Phần logic thuần đã được khoá lại bằng test (222 test). Phần UI thì hiện có **ba** lưới
+an toàn: đọc review, mở app thật ra xem, và từ 2026-09-12 là skill `ux-persona-review`
+(ADR-0016) — 10 Red Route chạy bởi 6 persona mô phỏng. **Không một cái nào chạy trong
+CI**, và cái thứ ba là proto-persona nên nó bắt vấn đề giao diện chứ không chứng minh
+được ai là người dùng thật.
 
 **Vì sao vẫn hoãn:** thêm `@testing-library` là một quyết định về hạ tầng test, không
 phải một phần của feature này; làm kèm sẽ trộn hai thứ trong một PR.
