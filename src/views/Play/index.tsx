@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { COLS, VISIBLE_ROWS, type Action, type Kind } from '../engine'
-import { touchHandlers } from '../input/touch'
-import { useI18n, type MessageKey } from '../i18n'
-import { Icon, type IconName } from './Icon'
-import { PiecePreview } from './PiecePreview'
-import { AnimatedNumber, useBumpKey } from './AnimatedNumber'
-import { useScores } from '../scores'
-import { useSettings } from '../settings'
-import { HighScoresScreen } from './HighScoresScreen'
-import { SettingsScreen } from './SettingsScreen'
-import { useGameSession, type HudSnapshot } from './useGameSession'
+import { COLS, VISIBLE_ROWS, type Action, type Kind } from '@/engine'
+import { touchHandlers } from '@/input/touch'
+import { useI18n, type MessageKey } from '@/i18n'
+import { Icon, type IconName } from './components/Icon'
+import { PiecePreview } from './components/PiecePreview'
+import { AnimatedNumber } from './components/AnimatedNumber'
+import { useBumpKey } from '@/hooks/useBumpKey'
+import { useScores } from '@/scores'
+import { useSettings } from '@/settings'
+import { HighScoresScreen } from './mains/HighScoresScreen'
+import { SettingsScreen } from './mains/SettingsScreen'
+import { useGameSession, type HudSnapshot } from '@/hooks/useGameSession'
 
 /**
  * The play screen (US-01). Layout follows the approved mockup: mobile 375 first,
@@ -190,7 +191,7 @@ function GameOverModal({
   )
 }
 
-export function PlayScreen() {
+export function Play() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [scoresOpen, setScoresOpen] = useState(false)

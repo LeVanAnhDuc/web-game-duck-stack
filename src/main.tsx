@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { I18nProvider } from './i18n'
 import { ScoresProvider } from './scores'
 import { SettingsProvider, useSettings } from './settings'
-import { PlayScreen } from './ui/PlayScreen'
-import './ui/tokens.css'
+import { Play } from './views/Play'
+import './styles/tokens.css'
 
 const root = document.getElementById('root')
 if (!root) throw new Error('#root is missing from index.html')
@@ -24,7 +24,7 @@ function App() {
   return (
     <I18nProvider locale={settings.locale}>
       <ScoresProvider>
-        <PlayScreen />
+        <Play />
       </ScoresProvider>
     </I18nProvider>
   )

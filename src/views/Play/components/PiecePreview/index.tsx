@@ -1,5 +1,5 @@
-import { shapeOf, type Kind } from '../engine'
-import { BEVEL_DARK, BEVEL_LIGHT, PIECE_COLORS } from '../render/sprites'
+import { shapeOf, type Kind } from '@/engine'
+import { BEVEL_DARK, BEVEL_LIGHT, PIECE_COLORS } from '@/render/sprites'
 
 /**
  * The hold slot and the next queue (FR-04, FR-05).

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useI18n, type MessageKey } from '../i18n'
-import { useScores } from '../scores'
-import { BUCKETS, MAX_NICKNAME, type Bucket, type ScoreEntry } from '../scores/types'
-import { useSettings } from '../settings'
-import { Icon } from './Icon'
+import { useI18n, type MessageKey } from '@/i18n'
+import { useScores } from '@/scores'
+import { BUCKETS, MAX_NICKNAME, type Bucket, type ScoreEntry } from '@/scores/types'
+import { useSettings } from '@/settings'
+import { Icon } from '../../components/Icon'
 
 /**
  * The high-score table (FR-32 -- FR-34).

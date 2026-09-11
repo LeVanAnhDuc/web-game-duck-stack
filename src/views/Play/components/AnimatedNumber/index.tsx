@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 /**
  * A number that counts toward its new value instead of jumping to it.
@@ -75,17 +75,4 @@ export function AnimatedNumber({
       {format(shownRef.current)}
     </span>
   )
-}
-
-/** Fires once whenever `value` changes, for a one-shot CSS highlight. */
-export function useBumpKey(value: number): number {
-  const [key, setKey] = useState(0)
-  const prev = useRef(value)
-  useEffect(() => {
-    if (prev.current !== value) {
-      prev.current = value
-      setKey((k) => k + 1)
-    }
-  }, [value])
-  return key
 }

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Git hook: gac commit bang `tsc` tren CA project.
+#
+# Bat cung co che voi commit-msg:
+#
+#     git config core.hooksPath .githooks
+#
+# Vi sao `tsc` chu khong phai ESLint (R-22): repo nay KHONG co ESLint — khong config,
+# khong devDependency, khong script. Dung linter la mot viec rieng (xem
+# 04-state/backlog.md §No ky thuat). Trong khi cho, `tsc` la thu gac duy nhat co that,
+# va no chay het trong ~1s nen dat vao pre-commit khong lam ai phai cho.
+#
+# `tsc` khong loc theo file staged duoc: kiem mot phan cay kieu thi khong co nghia gi.
+#
+# Day la phan hoi nhanh, KHONG phai rao chan: `core.hooksPath` khong theo duoc
+# `git clone`, va `--no-verify` bo qua duoc. Rao chan that la CI.
+set -uo pipefail
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+# Khong co gi trong .ts/.tsx bi doi thi khong can kiem kieu.
+if ! git diff --cached --name-only --diff-filter=ACMR -- '*.ts' '*.tsx' | grep -q .; then
+  exit 0
+fi
+
+if ! yarn --silent typecheck; then
+  printf '\n  Commit bi chan: tsc bao loi kieu.\n' >&2
+  printf '  Xem lai        : yarn typecheck\n' >&2
+  printf '  Bo qua co chu dich (hiem): git commit --no-verify\n\n' >&2
+  exit 1
+fi

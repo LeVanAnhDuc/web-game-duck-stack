@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { Action } from '../engine'
-import { useI18n, type MessageKey } from '../i18n'
-import { useSettings } from '../settings'
+import type { Action } from '@/engine'
+import { useI18n, type MessageKey } from '@/i18n'
+import { useSettings } from '@/settings'
 import {
   BINDABLE_ACTIONS,
   MAX_CELLS_PER_SECOND,
   MIN_CELLS_PER_SECOND,
   type Difficulty,
-} from '../settings/types'
-import { Icon } from './Icon'
+} from '@/settings/types'
+import { Icon } from '../../components/Icon'
 
 /**
  * The settings screen (US-02, FR-23 -- FR-30).

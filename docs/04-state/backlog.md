@@ -58,6 +58,15 @@ nhất*, nên `compareEntries` cần một chiều xếp thứ hai — không ph
 | PWA / chơi được khi offline | NFR-PERF-05 | thấp | game đã là tĩnh và client-only nên gần như chỉ cần thêm service worker |
 
 ## Nợ kỹ thuật — cố ý làm tạm
+**Hoãn R-04 (`ghosts/`) vì tầng view không có test hành vi** (2026-09-11, ADR-0015).
+`views/Play/index.tsx` giữ một `useEffect` gửi kết quả ván lên bảng điểm, kèm khoá
+`savedRunRef` chống gửi trùng. Đó là ứng viên `ghosts/SubmitFinishedRun`. Chưa tách vì
+12 file test của repo đều ở `engine/` `storage/` `audio/` `i18n/` `input/` `render/`
+`runtime/`, và repo **không có E2E** — nên không gì bắt được lỗi đổi thứ tự effect.
+Cũng hoãn R-12/R-21: repo chưa có ESLint (không config, không deps, không script).
+**Buộc phải trả khi:** có test render cho `views/Play` hoặc một bộ E2E; lúc đó tách
+ghost và dựng ESLint, mỗi việc một commit riêng.
+
 
 | Chỗ nào | Đã đánh đổi gì | Vì sao chấp nhận | Khi nào buộc phải trả |
 | --- | --- | --- | --- |

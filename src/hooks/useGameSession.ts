@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { TICK_HZ, type Command, type Kind, type Phase, type TopOutReason } from '../engine'
-import { createSfx } from '../audio'
-import { createKeyboardInput } from '../input/keyboard'
-import { createBoardRenderer } from '../render/canvas'
-import { createEffects } from '../render/effects'
-import { createLoop } from '../runtime/loop'
-import { createSession } from '../runtime/session'
-import { bucketOf, type Bucket } from '../scores/types'
-import { settingsToConfig, useSettings } from '../settings'
+import { TICK_HZ, type Command, type Kind, type Phase, type TopOutReason } from '@/engine'
+import { createSfx } from '@/audio'
+import { createKeyboardInput } from '@/input/keyboard'
+import { createBoardRenderer } from '@/render/canvas'
+import { createEffects } from '@/render/effects'
+import { createLoop } from '@/runtime/loop'
+import { createSession } from '@/runtime/session'
+import { bucketOf, type Bucket } from '@/scores/types'
+import { settingsToConfig, useSettings } from '@/settings'
 
 /**
  * Wires the game to React without letting React drive it.
