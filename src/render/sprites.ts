@@ -114,7 +114,32 @@ function drawGhostSprite(size: number, bevel: number, radius: number): HTMLCanva
  * makes the game playable at all for them: each cell carries its letter, and the
  * fills desaturate so the letter is what carries the meaning.
  */
-const CB_FILL = '#4A5160'
+export const CB_FILL = '#4A5160'
+
+/** The letter stamped over `CB_FILL`. Exported so the DOM previews use this one. */
+export const CB_LETTER = '#F4F5F7'
+
+/** What one cell of `kind` looks like: a fill, and a letter when colour is off. */
+export interface CellFace {
+  readonly fill: string
+  /** The kind's own letter in colour-blind mode, `null` when colour carries it. */
+  readonly letter: Kind | null
+}
+
+/**
+ * The ONE place that decides how a cell of `kind` is painted.
+ *
+ * The board is canvas and the two previews (hold, next queue) are DOM (ADR-0012), so
+ * nothing in the type system makes them agree -- and they did not: colour-blind mode
+ * reached the canvas and never reached the previews, leaving a player who had just
+ * switched it on unable to read the queue, which is the one place in Tetris where
+ * knowing the piece early is the whole point. Both call sites now read this.
+ *
+ * Reasoning and rejected alternatives: ADR-0017.
+ */
+export function cellFace(kind: Kind, colorBlind: boolean): CellFace {
+  return colorBlind ? { fill: CB_FILL, letter: kind } : { fill: PIECE_COLORS[kind], letter: null }
+}
 
 export function buildSprites(cell: number, dpr: number, colorBlind = false): SpriteSheet {
   const px = Math.max(1, Math.round(cell * dpr))
@@ -123,8 +148,9 @@ export function buildSprites(cell: number, dpr: number, colorBlind = false): Spr
 
   const byCode: (CanvasImageSource | null)[] = [null]
   for (const kind of KINDS) {
-    const sprite = drawCellSprite(px, bevel, colorBlind ? CB_FILL : PIECE_COLORS[kind], radius)
-    if (colorBlind) stampLetter(sprite, kind, px)
+    const face = cellFace(kind, colorBlind)
+    const sprite = drawCellSprite(px, bevel, face.fill, radius)
+    if (face.letter !== null) stampLetter(sprite, face.letter, px)
     byCode.push(sprite)
   }
   const ghost = drawGhostSprite(px, bevel, radius)
@@ -141,7 +167,7 @@ export function buildSprites(cell: number, dpr: number, colorBlind = false): Spr
 function stampLetter(canvas: HTMLCanvasElement, kind: Kind, px: number): void {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
-  ctx.fillStyle = '#F4F5F7'
+  ctx.fillStyle = CB_LETTER
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.font = `600 ${Math.max(8, Math.round(px * 0.6))}px ui-monospace, monospace`

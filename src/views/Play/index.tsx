@@ -4,6 +4,7 @@ import { touchHandlers } from '@/input/touch'
 import { useI18n, type MessageKey } from '@/i18n'
 import { Icon, type IconName } from './components/Icon'
 import { PiecePreview } from './components/PiecePreview'
+import { shouldAutoPause } from './dialogPause'
 import { AnimatedNumber } from './components/AnimatedNumber'
 import { useBumpKey } from '@/hooks/useBumpKey'
 import { useScores } from '@/scores'
@@ -99,11 +100,19 @@ function Hint({ keys, icons, whatKey }: { keys?: string; icons?: IconName[]; wha
   )
 }
 
-function Queue({ next, cell }: { next: readonly Kind[]; cell: number }) {
+function Queue({
+  next,
+  cell,
+  colorBlind,
+}: {
+  next: readonly Kind[]
+  cell: number
+  colorBlind: boolean
+}) {
   return (
     <div className="queue">
       {next.map((kind, i) => (
-        <PiecePreview key={`${kind}-${i}`} kind={kind} cell={cell} />
+        <PiecePreview key={`${kind}-${i}`} kind={kind} cell={cell} colorBlind={colorBlind} />
       ))}
     </div>
   )
@@ -233,6 +242,9 @@ export function Play() {
   const focusTrophy = useCallback(() => trophyRef.current?.focus(), [])
   const focusSettings = useCallback(() => settingsBtnRef.current?.focus(), [])
 
+  /** Did OUR opening of a dialog cause the pause? Only then does closing resume. */
+  const autoPausedRef = useRef(false)
+
   const savedRunRef = useRef(0)
   useEffect(() => {
     if (hud.phase !== 'gameOver' || hud.runId === savedRunRef.current) return
@@ -270,16 +282,34 @@ export function Play() {
    * window sent a second pause and un-paused the game under the dialog.
    */
   const openSettings = useCallback(() => {
-    const phase = livePhase()
-    if (phase !== 'paused' && phase !== 'gameOver') press('pause')
+    autoPausedRef.current = shouldAutoPause(livePhase())
+    if (autoPausedRef.current) press('pause')
     setSettingsOpen(true)
   }, [livePhase, press])
 
   /** Same rule as settings: reading a table while pieces fall is a trap. */
   const openScores = useCallback(() => {
-    const phase = livePhase()
-    if (phase !== 'paused' && phase !== 'gameOver') press('pause')
+    autoPausedRef.current = shouldAutoPause(livePhase())
+    if (autoPausedRef.current) press('pause')
     setScoresOpen(true)
+  }, [livePhase, press])
+
+  /**
+   * Closing a dialog undoes the pause that opening it caused -- and only that one.
+   *
+   * A player who paused by hand and then opened settings from the paused modal gets
+   * the paused modal back, because that is the state they chose. A player who opened
+   * settings from the top bar mid-round gets the round back, which is what three
+   * personas expected and did not get (ADR-0017).
+   */
+  const closeDialog = useCallback(() => {
+    setSettingsOpen(false)
+    setScoresOpen(false)
+    if (!autoPausedRef.current) return
+    autoPausedRef.current = false
+    // Read the live phase again: the round can only be `paused` here, but a future
+    // path that ends the round under an open dialog must not un-pause a dead board.
+    if (livePhase() === 'paused') press('pause')
   }, [livePhase, press])
 
   // The level flashes once when it changes. The score counts up inside
@@ -352,12 +382,12 @@ export function Play() {
         <div className="strip__col">
           <span className="label">{t('hud.hold')}</span>
           <div className="slot">
-            <PiecePreview kind={hud.hold} cell={12} />
+            <PiecePreview kind={hud.hold} cell={12} colorBlind={settings.colorBlindMode} />
           </div>
         </div>
         <div className="strip__col" style={{ flex: 1 }}>
           <span className="label">{t('hud.next')}</span>
-          <Queue next={hud.next} cell={9} />
+          <Queue next={hud.next} cell={9} colorBlind={settings.colorBlindMode} />
         </div>
       </div>
 
@@ -366,7 +396,7 @@ export function Play() {
           <div className="strip__col">
             <span className="label">{t('hud.hold')}</span>
             <div className="slot">
-              <PiecePreview kind={hud.hold} cell={16} />
+              <PiecePreview kind={hud.hold} cell={16} colorBlind={settings.colorBlindMode} />
             </div>
           </div>
           <div className="statlist">
@@ -389,7 +419,7 @@ export function Play() {
 
         <aside className="rail rail--right">
           <span className="label">{t('hud.next')}</span>
-          <Queue next={hud.next} cell={14} />
+          <Queue next={hud.next} cell={14} colorBlind={settings.colorBlindMode} />
         </aside>
       </div>
 
@@ -419,11 +449,11 @@ export function Play() {
       </footer>
 
       {settingsOpen ? (
-        <SettingsScreen onClose={() => setSettingsOpen(false)} onFocusFallback={focusSettings} />
+        <SettingsScreen onClose={closeDialog} onFocusFallback={focusSettings} />
       ) : null}
       {scoresOpen ? (
         <HighScoresScreen
-          onClose={() => setScoresOpen(false)}
+          onClose={closeDialog}
           onFocusFallback={focusTrophy}
           // Only offered from a finished round: "play again" mid-pause would throw
           // away a game the player was still in.

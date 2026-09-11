@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { Action } from '@/engine'
+import { TICK_HZ, type Action } from '@/engine'
 import { useI18n, type MessageKey } from '@/i18n'
 import { useSettings } from '@/settings'
 import {
@@ -18,6 +18,22 @@ import { Icon } from '../../components/Icon'
  */
 
 const DIFFICULTIES: readonly Difficulty[] = ['easy', 'normal', 'hard', 'custom']
+
+/**
+ * Ticks as milliseconds, for the DAS/ARR hints.
+ *
+ * The stored unit stays the tick, because the engine counts DAS/ARR in whole ticks
+ * and nothing else would be honest (invariant #4). But a player arriving from
+ * tetr.io or jstris thinks in milliseconds -- "ARR 0, DAS about 80" is the shared
+ * vocabulary of that group, and the review found one reading `8 ticks` with no way
+ * to convert it: "I don't know what one tick is in ms, and nothing here says".
+ * So the hint shows both, and the tick keeps the lead because it is what is saved.
+ *
+ * Rounded to a whole millisecond: 8 ticks is 133.33ms and a hint is not a spec.
+ */
+function ticksToMs(ticks: number): number {
+  return Math.round((ticks / TICK_HZ) * 1000)
+}
 
 /** Prettier than `event.code` without losing which physical key it is. */
 function keyLabel(code: string): string {
@@ -245,7 +261,7 @@ export function SettingsScreen({
 
           <section className="setgroup">
             <h3 className="label">{t('settings.handling')}</h3>
-            <Row label="DAS" hint={t('settings.dasHint', { n: settings.das })}>
+            <Row label="DAS" hint={t('settings.dasHint', { n: settings.das, ms: ticksToMs(settings.das) })}>
               <input
                 className="slider"
                 type="range"
@@ -257,7 +273,7 @@ export function SettingsScreen({
                 onChange={(e) => update({ das: Number(e.target.value) })}
               />
             </Row>
-            <Row label="ARR" hint={t('settings.arrHint', { n: settings.arr })}>
+            <Row label="ARR" hint={t('settings.arrHint', { n: settings.arr, ms: ticksToMs(settings.arr) })}>
               <input
                 className="slider"
                 type="range"
