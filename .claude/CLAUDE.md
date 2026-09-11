@@ -103,10 +103,29 @@ subject is not a formality here:
 - One `feat:` anywhere in the pushed range is enough, so the merge commit's own
   subject does not need a prefix
 
-Before trusting a release, both scripts run locally:
-`bash .github/scripts/next-version.sh` and
-`bash .github/scripts/release-notes.sh <next> [previous]`. Reasoning and rejected
-alternatives: ADR-0011.
+Before trusting a release, check it locally:
+
+```
+npm run release:next     # version number the pushed range would produce
+```
+
+`npm run release:notes` is **POSIX-only** — it substitutes the tag with `$(…)`, which
+npm hands to `cmd.exe` on Windows, so the literal string `$(npx` reaches git-cliff and
+it exits 2. CI is Linux so the script is fine there; locally on Windows run it through
+bash instead:
+
+```
+npx --yes git-cliff@2.13.1 --unreleased \
+  --tag "$(npx --yes git-cliff@2.13.1 --bumped-version)" --strip all
+```
+
+Both wrap `git-cliff` against `cliff.toml`. Reasoning and rejected alternatives:
+ADR-0011.
+
+> The two hand-rolled scripts this section used to name — `.github/scripts/next-version.sh`
+> and `release-notes.sh` — **no longer exist**; `7323df9` replaced them with the shared
+> commit rule plus a generated `cliff.toml`. Corrected 2026-09-12 after the instruction
+> was followed and failed.
 
 ### README `## Features` is NOT automated
 
