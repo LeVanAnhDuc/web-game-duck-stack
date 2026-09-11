@@ -24,6 +24,7 @@
 | [ADR-0014](0014-per-difficulty-score-boards-and-local-nickname.md) | Bảng điểm cao tách theo độ khó, nickname là nhãn cục bộ | 2026-09-07 | accepted |
 | [ADR-0015](0015-nhan-bo-quy-uoc-view-dung-chung.md) | Nhận bộ quy ước view dùng chung của workspace `web-game` | 2026-09-11 | accepted |
 | [ADR-0016](0016-review-ux-bang-persona-mo-phong.md) | Review UX bằng dàn persona mô phỏng, cài từ máy phát ở workspace | 2026-09-12 | accepted |
+| [ADR-0017](0017-mot-nguon-su-that-cho-mat-o-va-cho-tam-dung-dialog.md) | Một nguồn sự thật cho "mặt ô" và cho việc tạm dừng khi mở dialog | 2026-09-12 | accepted |
 <!-- END:auto -->
 
 Trạng thái: `accepted` · `superseded by ADR-00xx` · `deprecated`

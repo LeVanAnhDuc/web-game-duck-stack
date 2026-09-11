@@ -64,10 +64,10 @@ dụng** — không có server để áp.
 | --- | --- | --- |
 | NFR-A11Y-01 | Tương phản chữ thường ≥ 4.5:1, chữ lớn ≥ 3:1 | devtools |
 | NFR-A11Y-02 | Mọi hành động thao tác được bằng bàn phím, và focus luôn thấy được | thử tay |
-| NFR-A11Y-03 | Vùng bấm ≥ 44×44px trên thiết bị cảm ứng | review mockup |
+| NFR-A11Y-03 | Vùng bấm ≥ 44×44px trên thiết bị cảm ứng. **Đo 2026-09-12 trên bản deploy: 11/11 ở màn chơi và 24/24 trong màn Cài đặt đều đạt, `scrollWidth` = 375 nên không có cuộn ngang** | `getBoundingClientRect()` ở viewport 375×667 |
 | NFR-A11Y-04 | Mọi input có label liên kết; thông báo lỗi đọc được bởi screen reader | review |
 | NFR-A11Y-05 | Tôn trọng `prefers-reduced-motion` | review CSS |
-| NFR-A11Y-06 | **Màu không phải kênh thông tin duy nhất.** 7 loại khối phân biệt được khi bật chế độ không phụ thuộc màu (FR-26) | thử với bộ mô phỏng mù màu |
+| NFR-A11Y-06 | **Màu không phải kênh thông tin duy nhất.** 7 loại khối phân biệt được khi bật chế độ không phụ thuộc màu (FR-26) — **trên **mọi** bề mặt hiển thị khối, kể cả ô `Hold` và hàng chờ `Next`**, không chỉ bàn chơi (ADR-0017) | test `cellFace` + thử với bộ mô phỏng mù màu |
 
 ## i18n
 

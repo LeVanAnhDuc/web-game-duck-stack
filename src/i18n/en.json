@@ -67,7 +67,7 @@
   "scores.empty": "No rounds saved at this difficulty yet.",
   "scores.customCaveat": "Each custom round ran at its own speed, shown per row — these are not comparable with one another.",
   "scores.nickname": "Display name",
-  "scores.nicknameHint": "Shown next to your scores. Not an account.",
+  "scores.nicknameHint": "Shown next to your scores. Not an account. A round keeps the name you had set when it ended.",
   "scores.anon": "Player",
   "scores.clear": "Clear this board",
   "scores.clearConfirm": "Clear — cannot be undone",

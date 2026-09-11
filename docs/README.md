@@ -14,7 +14,14 @@
 | [`03-design/invariants.md`](03-design/invariants.md) | Sửa gì thì hệ thống sai **âm thầm** — test vẫn xanh mà kết… | 🟢 đủ | phát hiện một bất biến mới — thường là ngay sau khi ai đó … |
 | [`04-state/backlog.md`](04-state/backlog.md) | Đang làm gì, tiếp theo làm gì, và đang nợ những gì? | 🟢 đủ | bắt đầu/kết thúc một việc · brainstorm ra việc mới · cố ý … |
 | [`design-system/tetris/MASTER.md`](design-system/tetris/MASTER.md) | — | — | — |
-| [`decisions/`](decisions/README.md) | Tại sao lại làm thế này? | 16 ADR | mỗi quyết định kỹ thuật |
+| [`ux-reviews/2026-09-12-logs/00-dieu-phoi-va-hai-loi.md`](ux-reviews/2026-09-12-logs/00-dieu-phoi-va-hai-loi.md) | — | — | — |
+| [`ux-reviews/2026-09-12-logs/kiem-bang-tay.md`](ux-reviews/2026-09-12-logs/kiem-bang-tay.md) | — | — | — |
+| [`ux-reviews/2026-09-12-logs/p01-blind-RR-04-RR-05.md`](ux-reviews/2026-09-12-logs/p01-blind-RR-04-RR-05.md) | — | — | — |
+| [`ux-reviews/2026-09-12-logs/p02-DO-DANG-khong-dung-lam-dan-chung.md`](ux-reviews/2026-09-12-logs/p02-DO-DANG-khong-dung-lam-dan-chung.md) | — | — | — |
+| [`ux-reviews/2026-09-12-logs/p03-RR-07.md`](ux-reviews/2026-09-12-logs/p03-RR-07.md) | — | — | — |
+| [`ux-reviews/2026-09-12-logs/p05-RR-03-RR-08.md`](ux-reviews/2026-09-12-logs/p05-RR-03-RR-08.md) | — | — | — |
+| [`ux-reviews/2026-09-12-persona-review.md`](ux-reviews/2026-09-12-persona-review.md) | — | — | — |
+| [`decisions/`](decisions/README.md) | Tại sao lại làm thế này? | 17 ADR | mỗi quyết định kỹ thuật |
 | [`../.env.example`](../.env.example) | cần biến nào để chạy được dự án này? | ⚪ chưa áp dụng | code đọc một biến mới (process.env.X / os.getenv / os.Gete… |
 <!-- END:auto -->
 

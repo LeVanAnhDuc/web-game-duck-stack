@@ -67,7 +67,7 @@
   "scores.empty": "Chưa có lượt nào được lưu ở mức này.",
   "scores.customCaveat": "Mỗi lượt tự đặt chạy ở tốc độ riêng, hiện ở từng dòng — các dòng này không so được với nhau.",
   "scores.nickname": "Tên hiển thị",
-  "scores.nicknameHint": "Hiện cạnh điểm của bạn. Không phải tài khoản.",
+  "scores.nicknameHint": "Hiện cạnh điểm của bạn. Không phải tài khoản. Mỗi ván giữ đúng cái tên bạn đã đặt lúc ván đó kết thúc.",
   "scores.anon": "Người chơi",
   "scores.clear": "Xoá bảng này",
   "scores.clearConfirm": "Xoá — không hoàn lại được",
