@@ -54,6 +54,12 @@ nhập tên không được nói ra). Còn lại ở §Việc tiếp theo.
    nên các phiên trao đổi trạng thái qua cùng một `localStorage`. Đã xảy ra thật: p02 thấy phím
    hard-drop tự đổi thành `Enter` — phím p01 vừa gán.
 
+**Đã merge và phát hành xong, không còn gì trên nhánh.** `main` = `b95d302`, release **v0.5.5**
+(patch — nhánh không có commit `feat:` nào), deploy Pages thành công, nhánh
+`chore/ux-review-2026-09-12` đã xoá. Bốn fix đã kiểm lại **trên bản production** sau khi deploy:
+gợi ý DAS/ARR hiện `(133 ms)`, đóng `Cài đặt` về thẳng ván chơi, ô `Hold`/`Next` có chữ ở cả
+1440 và 375, gợi ý tên đã nói ra quy tắc thứ tự.
+
 **Không có việc nào đang dở.**
 
 Feature `stats-highscores` đã xong (FR-32 → FR-34, ADR-0014). Với nó thì **44/44 FR
