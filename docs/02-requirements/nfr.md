@@ -31,7 +31,7 @@ Tài liệu thiết kế của feature tham chiếu ID ở dòng `Liên quan:` �
 > **Về các con số:** những dòng có ngân sách là **ngưỡng tự chọn**, trừ khi ghi rõ
 > đã đo. Tình trạng sau feature `core-gameplay` (2026-09-03):
 >
-> - `NFR-PERF-04` bundle: **đã đo**, 71.5KB gzip so với trần 200KB.
+> - `NFR-PERF-04` bundle: **đã đo**, 83.79KB gzip so với trần 200KB (2026-09-12).
 > - `NFR-PERF-01` frame budget, `NFR-PERF-02` input latency, `NFR-PERF-03` cấp phát
 >   trên hot path, `NFR-PERF-05` thời gian tải: **chưa đo**. Chưa chạy Performance
 >   panel, chưa chụp heap snapshot, chưa chạy Lighthouse. Đừng đọc chúng như số đo.
@@ -43,7 +43,7 @@ Tài liệu thiết kế của feature tham chiếu ID ở dòng `Liên quan:` �
 | NFR-PERF-01 | 60fps liên tục ở **mọi** cấp độ. Ngân sách một frame (tick + draw) ≤ 8ms | Performance panel, chơi tới level 15 |
 | NFR-PERF-02 | Độ trễ đầu vào ≤ 1 tick (16.7ms) từ `keydown` đến khi state đổi | test đơn vị trên loop + đo tay |
 | NFR-PERF-03 | **Không cấp phát trên hot path.** `board` tái dùng cùng một `Uint8Array`; `reduce` không sinh object/array mới trên đường đi thường | heap snapshot: chơi 3 phút không thấy sawtooth GC |
-| NFR-PERF-04 | Bundle sau gzip ≤ 200KB. **Đo 2026-09-03: 69.3KB JS + 2.2KB CSS = 71.5KB** | báo cáo build của Vite |
+| NFR-PERF-04 | Bundle sau gzip ≤ 200KB. **Đo 2026-09-12: 80.75KB JS + 3.04KB CSS = 83.79KB** (lần đo 2026-09-03 là 71.5KB, trước ba feature `animation` · `settings` · `stats-highscores`) | báo cáo build của Vite |
 | NFR-PERF-05 | Tải xong và chơi được trong ≤ 2s trên 3G mô phỏng | Lighthouse |
 
 ## Security
