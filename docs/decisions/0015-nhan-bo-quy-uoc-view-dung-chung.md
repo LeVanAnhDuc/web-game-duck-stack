@@ -44,7 +44,7 @@ devDependency, không script. Rule giả định linter đã có; dựng linter 
 Vite + React + TS là một việc riêng, có hệ quả riêng (thêm deps, thêm thời gian CI,
 và một đợt sửa cảnh báo đầu tiên chưa ai đo được bao lớn).
 
-**R-22 áp có sửa.** `.githooks/pre-commit` chạy `yarn typecheck` thay vì `eslint`, vì
+**R-22 áp có sửa.** `.githooks/pre-commit` chạy `pnpm typecheck` thay vì `eslint`, vì
 đó là thứ gác duy nhất có thật ở đây. Nó chạy ~1s nên không ai phải chờ.
 
 ## 3. Phương án đã loại
