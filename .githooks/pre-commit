@@ -23,9 +23,9 @@ if ! git diff --cached --name-only --diff-filter=ACMR -- '*.ts' '*.tsx' | grep -
   exit 0
 fi
 
-if ! yarn --silent typecheck; then
+if ! pnpm --silent typecheck; then
   printf '\n  Commit bi chan: tsc bao loi kieu.\n' >&2
-  printf '  Xem lai        : yarn typecheck\n' >&2
+  printf '  Xem lai        : pnpm typecheck\n' >&2
   printf '  Bo qua co chu dich (hiem): git commit --no-verify\n\n' >&2
   exit 1
 fi

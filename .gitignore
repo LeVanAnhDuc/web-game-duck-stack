@@ -24,9 +24,11 @@ coverage/
 # thay agent type, va khong co cach nao sinh lai tu trong repo nay.
 !/.claude/agents/
 
-# Repo nay dung npm (package-lock.json). Mot yarn.lock lot vao la hai lockfile
-# trong mot repo: CI cai bang mot cai, nguoi dev cai bang cai kia.
+# Repo nay dung pnpm (pnpm-lock.yaml, DUOC commit). Mot yarn.lock hay mot
+# package-lock.json lot vao la hai lockfile trong mot repo: CI cai bang mot cai,
+# nguoi dev cai bang cai kia.
 yarn.lock
+package-lock.json
 
 # Rac cua playwright MCP: snapshot a11y tree + anh tam moi lan lai trinh duyet.
 # Sinh ra khi chay skill ux-persona-review, khong phai mot phan cua san pham.

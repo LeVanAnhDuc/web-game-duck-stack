@@ -64,15 +64,18 @@ those two numbers as part of the controls, not as a preference.
 ## Commands
 
 ```bash
-npm ci
-npm run dev        # dev server
-npm run test       # unit tests
-npm run typecheck  # tsc, no emit
-npm run build      # typecheck + production build into dist/
-npm run preview    # serve the production build
+pnpm install --frozen-lockfile
+pnpm dev        # dev server
+pnpm test       # unit tests
+pnpm typecheck  # tsc, no emit
+pnpm build      # typecheck + production build into dist/
+pnpm preview    # serve the production build
 ```
 
-Uses **npm**, not Yarn (ADR-0001). No environment variables are needed — see
+Uses **pnpm**. ADR-0001 picked npm and its reasoning — one package manager across
+gen-2, never Yarn — still holds; the workspace moved that one manager to pnpm on
+2026-09-13, and `pnpm-lock.yaml` was imported from the npm lockfile, so the resolved
+versions are unchanged. No environment variables are needed — see
 [`.env.example`](.env.example) for why that is the correct answer rather than an
 omission.
 
@@ -152,8 +155,8 @@ direct commits.
 Both halves run locally, so you can see what a release will say before it says it:
 
 ```bash
-npm run release:next     # which tag the next release would get
-npm run release:notes    # what its notes would say
+pnpm release:next     # which tag the next release would get
+pnpm release:notes    # what its notes would say
 ```
 
 **The README is not automated.** Any `feat:` that changes what a player can do must

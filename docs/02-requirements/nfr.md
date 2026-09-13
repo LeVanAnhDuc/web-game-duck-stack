@@ -55,7 +55,7 @@ dụng** — không có server để áp.
 | ID | Ngưỡng | Cách kiểm |
 | --- | --- | --- |
 | NFR-SEC-01 | Secret chỉ đọc từ biến môi trường. Không hardcode, không commit | grep + review |
-| NFR-SEC-02 | Dependency không có lỗ hổng mức high trở lên | `npm audit` trong CI |
+| NFR-SEC-02 | Dependency không có lỗ hổng mức high trở lên | `pnpm audit` trong CI |
 | NFR-SEC-03 | Nickname do người chơi nhập **không** được đưa vào `innerHTML`; không dùng `eval` | grep + review |
 
 ## Accessibility

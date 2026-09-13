@@ -112,7 +112,7 @@ Hai ranh giới dễ bị phá nhất, ghi rõ để khỏi phải suy luận l�
 | --- | --- | --- |
 | Build · dev server | Vite | ADR-0001 |
 | Ngôn ngữ | TypeScript | ADR-0001 |
-| Package manager | npm | ADR-0001 |
+| Package manager | pnpm | ADR-0001 (chọn npm; workspace chuyển sang pnpm 2026-09-13) |
 | Tầng UI | React | ADR-0001 |
 | Test | Vitest | ADR-0001 |
 | Luật chơi | TypeScript thuần, deterministic, RNG inject | ADR-0002 |
