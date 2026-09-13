@@ -106,17 +106,17 @@ subject is not a formality here:
 Before trusting a release, check it locally:
 
 ```
-npm run release:next     # version number the pushed range would produce
+pnpm release:next     # version number the pushed range would produce
 ```
 
-`npm run release:notes` is **POSIX-only** — it substitutes the tag with `$(…)`, which
-npm hands to `cmd.exe` on Windows, so the literal string `$(npx` reaches git-cliff and
-it exits 2. CI is Linux so the script is fine there; locally on Windows run it through
-bash instead:
+`pnpm release:notes` is **POSIX-only** — it substitutes the tag with `$(…)`, which the
+package manager hands to `cmd.exe` on Windows, so the literal string `$(pnpm` reaches
+git-cliff and it exits 2. CI is Linux so the script is fine there; locally on Windows
+run it through bash instead:
 
 ```
-npx --yes git-cliff@2.13.1 --unreleased \
-  --tag "$(npx --yes git-cliff@2.13.1 --bumped-version)" --strip all
+pnpm dlx git-cliff@2.13.1 --unreleased \
+  --tag "$(pnpm dlx git-cliff@2.13.1 --bumped-version)" --strip all
 ```
 
 Both wrap `git-cliff` against `cliff.toml`. Reasoning and rejected alternatives:
@@ -194,7 +194,7 @@ several at once costs ~18k tokens and produces conflicting guidance.
   logo, banner, slide, or brand-asset work.
 - **`ui-styling` only applies if this project turns out to use React + Tailwind +
   shadcn/ui.** That skill hard-codes shadcn/Radix/Tailwind, down to
-  `npx shadcn@latest init`. Detect the stack from `package.json` first; if it is
+  `pnpm dlx shadcn@latest init`. Detect the stack from `package.json` first; if it is
   anything else (Ant Design, Vuetify, MUI, plain CSS), ignore this skill even
   when it fires on its own.
 

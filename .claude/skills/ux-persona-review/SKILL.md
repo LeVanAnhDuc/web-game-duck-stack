@@ -10,7 +10,8 @@ description: Use when you want to know how a real stranger experiences Duck Stac
 - Thư mục: `D:/Learn/web-app-ecosystem/web-game/web-game-tetris`
 - Port: **5173** (Vite mặc định — `vite.config.ts` không khai `server.port`, nên nếu 5173 đã bị
   chiếm thì Vite tự nhảy sang 5174+ và in port thật ra terminal; lấy theo dòng đó, đừng đoán)
-- Bật app: `npm run dev` (repo dùng **npm**, không phải Yarn — ADR-0001)
+- Bật app: `pnpm dev` (repo dùng **pnpm** — ADR-0001 chọn npm, workspace chuyển sang
+  pnpm ngày 2026-09-13; vẫn không phải Yarn)
 - Dấu hiệu nhận biết đúng app: `<title>` là **Duck Stack**, nền tối `#0E0F13`, và trên trang có
   một **bàn chơi 10×20 vẽ bằng `<canvas>`** kèm ô `Hold` / `Next`, thanh HUD `Score · Lines ·
   Level`. Không có form đăng nhập, không có ô email ở bất kỳ đâu. Thấy trang có nút đăng nhập

@@ -18,19 +18,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
 
-      # `npm ci` and not `npm install`: the lockfile is the answer, and the
-      # workspace has already been bitten by a different dependency tree.
-      - run: npm ci
+      # `pnpm install --frozen-lockfile` and not a bare `pnpm install`: the
+      # lockfile is the answer, and the workspace has already been bitten by a
+      # different dependency tree.
+      - run: pnpm install --frozen-lockfile
 
-      - run: npm test
+      - run: pnpm test
 
-      # `npm run build` is `tsc --noEmit && vite build`, so this covers typecheck.
-      - run: npm run build
+      # `pnpm build` is `tsc --noEmit && vite build`, so this covers typecheck.
+      - run: pnpm build
 
       - name: Report bundle size against NFR-PERF-04
         run: |
@@ -44,10 +47,11 @@ jobs:
           done
 
   # A SEPARATE job, so the audit runs beside the tests instead of in front of them.
-  # Measured on the first run of this workflow: npm ci took 157s and npm audit 212s
-  # while test and build together took 2s, so the audit was 56% of a 377s critical
-  # path for no reason. `npm audit` reads package-lock.json and asks the registry --
-  # it needs no node_modules, so this job skips the install entirely.
+  # Measured on the first run of this workflow, back when this repo was on npm:
+  # `npm ci` took 157s and `npm audit` 212s while test and build together took 2s,
+  # so the audit was 56% of a 377s critical path for no reason. The shape is what
+  # matters, not the numbers: `pnpm audit` reads pnpm-lock.yaml and asks the
+  # registry -- it needs no node_modules, so this job skips the install entirely.
   #
   # NFR-SEC-02 names CI as where this threshold is checked; this is that check.
   # `--audit-level=high` fails on high and critical only: moderate advisories in
@@ -56,6 +60,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -63,12 +69,17 @@ jobs:
       # returned 503 on this workflow's own run, which turned a security check into
       # a random merge blocker for a reason that has nothing to do with the code.
       # A real advisory still fails the job; an outage reports and passes.
-      - name: npm audit (high and above)
+      - name: pnpm audit (high and above)
         run: |
           for attempt in 1 2 3; do
-            out=$(npm audit --audit-level=high 2>&1) && { echo "$out"; exit 0; }
+            out=$(pnpm audit --audit-level=high 2>&1) && { echo "$out"; exit 0; }
             code=$?
-            if echo "$out" | grep -qiE 'audit endpoint returned an error|Service Unavailable|ENOTFOUND|ETIMEDOUT|ECONNRESET'; then
+            # ERR_PNPM_AUDIT_BAD_RESPONSE is how pnpm reports the outage npm used
+            # to phrase as "audit endpoint returned an error". Both spellings are
+            # matched, because the message text is the only thing separating
+            # "registry is down" from "you have a vulnerability" -- neither tool
+            # gives the two a distinct exit code.
+            if echo "$out" | grep -qiE 'ERR_PNPM_AUDIT|audit endpoint|Service Unavailable|ENOTFOUND|ETIMEDOUT|ECONNRESET'; then
               echo "::warning::audit attempt $attempt could not reach the registry"
               sleep $((attempt * 15))
               continue
@@ -76,5 +87,5 @@ jobs:
             echo "$out"
             exit $code
           done
-          echo "::warning::npm audit could not reach the registry after 3 attempts; not failing the build for someone else's outage"
+          echo "::warning::pnpm audit could not reach the registry after 3 attempts; not failing the build for someone else's outage"
 
