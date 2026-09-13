@@ -18,6 +18,8 @@ Vite + React + TypeScript, quản lý gói bằng **npm**, test bằng Vitest, b
 tĩnh và deploy lên GitHub Pages. Luật chơi **không** nằm trong React — xem ADR-0002
 và ADR-0003. React chỉ phụ trách điều hướng màn hình, HUD, form và bảng.
 
+> **Superseded 13.09.2026** — the workspace moved to pnpm 10; see the `build(deps)` commit that converted this repo.
+
 ## 3. Phương án đã loại
 
 | Phương án | Vì sao loại |

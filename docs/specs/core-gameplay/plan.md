@@ -66,7 +66,7 @@ canvas không query được, kiểm bằng mắt ở task 16.
 
 ## Chốt
 
-- [x] **17.** `npm run test` xanh · `npm run typecheck` sạch · `npm run build` xong.
+- [x] **17.** `pnpm test` xanh · `pnpm typecheck` sạch · `pnpm build` xong.
 - [x] **18.** Xem app thật: screenshot 375 / 768 / 1024 / 1440, thử bàn phím, thử
   pause, thử game over. **UI chưa nhìn bằng mắt thì chưa xong.**
 - [x] **19.** `README.md` §Features một dòng · `scope.md` FR-01→FR-22 sang `xong` ·

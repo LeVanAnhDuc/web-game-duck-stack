@@ -15,7 +15,7 @@ với hai workflow: `release.yml` tự tính version từ tiền tố Convention
 
 ## 2. Quyết định
 
-Ba workflow: `ci.yml` (mọi pull request: `npm ci` · `npm test` · `npm run build`),
+Ba workflow: `ci.yml` (mọi pull request: `pnpm install --frozen-lockfile` · `pnpm test` · `pnpm build`),
 `deploy.yml` (push `main` → Pages), `release.yml` (push `main` → tạo release).
 
 Logic version và logic soạn notes nằm trong **hai script bash dưới
