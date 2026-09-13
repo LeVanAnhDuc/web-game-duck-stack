@@ -38,6 +38,14 @@ jobs:
           # first commit instead.
           fetch-depth: 0
 
+      # Only here to provide `pnpm dlx`. This job installs no dependencies, so it
+      # has no setup-node and nothing else would put pnpm on PATH -- the first
+      # pnpm run of this workflow failed with `pnpm: command not found` for
+      # exactly that reason. The version comes from `packageManager` in
+      # package.json, so this job and the local `pnpm release:next` run the same
+      # git-cliff.
+      - uses: pnpm/action-setup@v4
+
       - name: Work out the version
         id: v
         run: |
