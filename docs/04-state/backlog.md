@@ -2,7 +2,7 @@
 
 > **Trả lời:** Đang làm gì, tiếp theo làm gì, và đang nợ những gì?
 > **Trạng thái:** 🟢 đủ
-> **Cập nhật:** 2026-09-04 · commit df87816
+> **Cập nhật:** 2026-10-04
 > **Cập nhật khi:** bắt đầu/kết thúc một việc · brainstorm ra việc mới · cố ý đi đường tắt
 
 <!-- CÁCH ĐIỀN
@@ -79,7 +79,8 @@ nhất*, nên `compareEntries` cần một chiều xếp thứ hai — không ph
 | Viết test cho hai script trong `.github/scripts/` | ADR-0011 | thấp | hiện chỉ kiểm bằng cách chạy tay 6 tình huống; chúng quyết định số version nên sai là sai vĩnh viễn |
 | Chế độ Sprint 40 lines và Ultra 2 phút | — | thấp | dùng chung engine, chỉ khác điều kiện kết thúc và chỉ số hiển thị. **Không** phải Non-Goal — cấp FR mới khi làm |
 | Màn hình xem lại replay | FR-18 | thấp | dữ liệu replay đã được ghi từ bản đầu (ADR-0002); chỉ thiếu giao diện |
-| Leaderboard server + đăng nhập qua Ducker ID | ADR-0004 | thấp | **bị chặn bởi bên ngoài**: Ducker ID chưa có `/oauth/authorize`, `/oauth/token`, JWKS |
+| Leaderboard server (đồng bộ điểm theo tài khoản Ducker ID) | ADR-0004 · ADR-0018 | thấp | Phần **đăng nhập** (chỉ danh tính) đã xong và ship tối (ADR-0018); Ducker ID nay có `/oauth/*`. Còn thiếu là **server nhận điểm** — vẫn Non-Goal cho tới khi có chống gian lận |
+| Bật đăng nhập Ducker ID ở bản deploy | ADR-0018 | thấp | Đăng ký client ở admin Ducker ID (redirect URI `https://levananhduc.github.io/web-game-duck-stack/`), thêm origin vào `CORS_ORIGINS`, đặt cờ + 4 giá trị `VITE_DUCKER_*` làm repository variables và truyền trong `deploy.yml` |
 | **F4 — đường vào ô `Display name` từ `Cài đặt`** | FR-34 · ADR-0014 | **trung bình** | p05 lục hết 6 mục của `Cài đặt` rồi mới tìm ra nó ở bảng điểm. **Đừng dời:** MASTER.md §7 ghi việc đặt nó trong vùng cuộn của hộp điểm đã trả lại 170px cho danh sách ở khổ 375. Cái thiếu là một *con đường*, không phải một lần dời |
 | **Khổ 375 không hiện `Số hàng`** (`display: none`) | FR-01 · US-01 | **trung bình** | Tìm ra bằng **số đo**, chưa persona nào vấp (p04 bị huỷ). US-01 bước 4 hứa "điểm và **số hàng** tăng", và `RR-01.done_when` định nghĩa bằng chính ô Lines — ở khổ điện thoại cái thước đó không có. Sửa thì phải quyết định **bỏ gì thay vào**, nên không làm kèm pass fix |
 | **F6 — HUD không nằm trên nhịp lưới của bàn chơi** | — | thấp | Lệch khỏi MASTER.md §1/§6, đo trên ảnh: `HOLD` cách bàn ~135px còn `NEXT` ~28px. **0/3 persona vấp.** Cần một pass thiết kế có cổng mockup, làm cùng lượt với dòng trên |
@@ -109,6 +110,11 @@ ghost và dựng ESLint, mỗi việc một commit riêng.
 | `docs/02-requirements/nfr.md` — NFR-PERF-01, 02, 03, 05 | Bốn ngưỡng vẫn là ngân sách **chưa đo**: frame budget, input latency, cấp phát hot path, thời gian tải | Cần Performance panel, heap snapshot và Lighthouse — mỗi thứ một phiên riêng, và cần một bàn chơi đã xếp cao mới đo có nghĩa | Trước khi tăng độ khó (thêm mode) hoặc khi có báo cáo rớt frame |
 | `src/render/canvas.ts` — `draw()` | Vẽ 200 `fillRect` nền well mỗi frame trước khi blit ô | Đơn giản và đúng; chưa đo thấy vượt ngân sách | Ngay khi `NFR-PERF-01` được đo thật và thiếu ngân sách — cách thay là chỉ vẽ ô đã đổi |
 | `docs/specs/core-gameplay/design.md` §1 vs `plan.md` | `design.md` nói scope là FR-01→FR-22 nhưng `plan.md` không có task cho FR-17 | Phát hiện lúc cập nhật `scope.md`, sau khi code đã xong | Đã trả một nửa: FR-17 chuyển sang feature 3. Bài học: đối chiếu danh sách FR của `design.md` với danh sách task của `plan.md` **trước** khi bắt đầu code |
+
+**Nợ `[skip release]` của ADR-0018** (2026-10-04). Các commit đăng nhập Ducker ID mang
+`[skip release]`; `release.yml` quét cả khoảng từ tag gần nhất nên mọi push sau đó cũng bị bỏ
+qua. **Buộc phải trả khi:** có thay đổi người chơi thấy được cần phát hành — cắt tay một lần
+(`pnpm release:next` → tag → `gh release create`, xem ADR-0018 §4).
 
 ### Không có test component nào
 

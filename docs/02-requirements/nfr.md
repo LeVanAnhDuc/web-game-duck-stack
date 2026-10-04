@@ -2,7 +2,7 @@
 
 > **Trả lời:** Ngưỡng nào áp cho **mọi** feature, để không phải nhắc lại từng lần?
 > **Trạng thái:** 🟢 đủ
-> **Cập nhật:** 2026-09-03 · commit d171af7
+> **Cập nhật:** 2026-10-04
 > **Cập nhật khi:** thêm loại tài nguyên mới · thêm nhóm người dùng · sau sự cố sinh ra ngưỡng mới
 
 <!-- CÁCH ĐIỀN
@@ -95,6 +95,12 @@ replay — nằm trong `localStorage` **trên máy người dùng** và không �
 đâu. Không có server, không có analytics, không có cookie của bên thứ ba. Vì vậy
 không có PII nào do dự án này lưu giữ.
 
-Xem lại toàn bộ mục này khi cắm Ducker ID (ADR-0004) — lúc đó mới xuất hiện dữ liệu
-rời khỏi máy người dùng, và ba ngưỡng mặc định đã xoá (liệt kê PII, xoá tài khoản
-kéo theo xoá PII, đường khôi phục dữ liệu) sẽ phải được cấp ID mới.
+**Ngoại lệ có giới hạn: đăng nhập Ducker ID tùy chọn (ADR-0018).** Chỉ `sessionStorage` khoá
+`ducker.pkce`, xoá khi quay về từ Ducker ID; mạng chỉ tới issuer đã cấu hình, chỉ sau khi
+người chơi bấm đăng nhập; cờ tắt (bản deploy) thì không đọc `location.search`, không chạm
+storage, không request nào. Hồ sơ (`sub`, tên, email, ảnh) chỉ nằm trong bộ nhớ, tải lại là
+đăng xuất. Điểm, thiết lập và replay vẫn không rời máy.
+
+Xem lại toàn bộ mục này khi dữ liệu thật sự bắt đầu rời máy người dùng (đồng bộ điểm lên
+server) — lúc đó ba ngưỡng mặc định đã xoá (liệt kê PII, xoá tài khoản kéo theo xoá PII,
+đường khôi phục dữ liệu) sẽ phải được cấp ID mới.
