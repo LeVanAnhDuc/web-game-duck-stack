@@ -1,3 +1,6 @@
+// Must stay first: capturing the OAuth callback has to happen before anything else
+// reads the URL (it is a no-op unless Ducker ID sign-in is configured).
+import '@/auth/session'
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { I18nProvider } from './i18n'

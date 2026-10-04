@@ -5,7 +5,7 @@
 [![Release](https://img.shields.io/github/v/release/LeVanAnhDuc/web-game-duck-stack?sort=semver)](https://github.com/LeVanAnhDuc/web-game-duck-stack/releases)
 
 Duck Stack is Tetris on the modern Guideline, running entirely in the browser. No
-backend, no account, no install — open the page and play.
+backend, no game accounts, no install — open the page and play.
 
 Built for players who already have Guideline reflexes: full SRS with wall kicks,
 7-bag, hold, ghost piece, lock delay with move reset, T-spin, combo and
@@ -39,6 +39,8 @@ against how it looks on screen.
   volume.
 - A local high-score table, kept per difficulty because scores from different fall
   speeds are not comparable, with a display name and timestamps in your own language.
+- Optional sign-in with Ducker ID — identity only (name, avatar, profile link, sign
+  out), behind a feature flag and off in the deployed build.
 - Motion that reads as motion: pieces fall sub-cell rather than stepping a whole row
   at a time, sideways moves travel, a hard drop leaves a trail, a completed row
   flashes before the stack collapses onto it, and a tetris shakes the board. All of
@@ -75,9 +77,10 @@ pnpm preview    # serve the production build
 Uses **pnpm**. ADR-0001 picked npm and its reasoning — one package manager across
 gen-2, never Yarn — still holds; the workspace moved that one manager to pnpm on
 2026-09-13, and `pnpm-lock.yaml` was imported from the npm lockfile, so the resolved
-versions are unchanged. No environment variables are needed — see
-[`.env.example`](.env.example) for why that is the correct answer rather than an
-omission.
+versions are unchanged. Copy [`.env.example`](.env.example) to `.env` only to
+try the optional Ducker ID sign-in locally (`VITE_FEATURE_DUCKER_SIGN_IN`, the four
+`VITE_DUCKER_*` values, and the redirect URIs to register); with none of it set the game
+needs no configuration and shows no sign-in button.
 
 ## How it is put together
 
@@ -88,6 +91,7 @@ omission.
 | `src/input/` | Keyboard and touch, reporting presses and releases only |
 | `src/render/` | Canvas renderer and its pre-rendered cell sprites |
 | `src/i18n/` | Two flat locale files and a `t()` |
+| `src/auth/` | Optional Ducker ID sign-in: config, PKCE, callback capture, session store (ADR-0018) |
 | `src/ui/` | React: screens, HUD, modals |
 
 The engine is deterministic on purpose: a whole game is described by a seed plus the

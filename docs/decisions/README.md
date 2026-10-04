@@ -11,7 +11,7 @@
 | [ADR-0001](0001-use-vite-react-typescript.md) | Dùng Vite + React + TypeScript, npm, deploy tĩnh | 2026-09-03 | accepted |
 | [ADR-0002](0002-keep-game-engine-pure-and-deterministic.md) | Giữ engine luật chơi thuần khiết và deterministic | 2026-09-03 | accepted |
 | [ADR-0003](0003-canvas-2d-with-fixed-timestep-loop-outside-react.md) | Vẽ bàn chơi bằng Canvas 2D, vòng lặp fixed-timestep chạy ngoài React | 2026-09-03 | accepted |
-| [ADR-0004](0004-async-storage-identity-interfaces-defer-ducker-id.md) | Đặt storage và identity sau interface async, hoãn tích hợp Ducker ID | 2026-09-03 | accepted |
+| [ADR-0004](0004-async-storage-identity-interfaces-defer-ducker-id.md) | Đặt storage và identity sau interface async, hoãn tích hợp Ducker ID | 2026-09-03 | accepted (một câu bị ADR-0018 thay) |
 | [ADR-0005](0005-compute-das-arr-inside-engine.md) | Tính DAS/ARR trong engine, không ở tầng input | 2026-09-03 | accepted |
 | [ADR-0006](0006-hand-rolled-i18n-layer.md) | Tự viết lớp i18n mỏng thay vì dùng thư viện | 2026-09-03 | accepted |
 | [ADR-0007](0007-copy-claude-dir-into-worktrees.md) | Copy `.claude/` vào worktree, và xoá bản copy sau khi merge | 2026-09-03 | accepted |
@@ -25,6 +25,7 @@
 | [ADR-0015](0015-nhan-bo-quy-uoc-view-dung-chung.md) | Nhận bộ quy ước view dùng chung của workspace `web-game` | 2026-09-11 | accepted |
 | [ADR-0016](0016-review-ux-bang-persona-mo-phong.md) | Review UX bằng dàn persona mô phỏng, cài từ máy phát ở workspace | 2026-09-12 | accepted |
 | [ADR-0017](0017-mot-nguon-su-that-cho-mat-o-va-cho-tam-dung-dialog.md) | Một nguồn sự thật cho "mặt ô" và cho việc tạm dừng khi mở dialog | 2026-09-12 | accepted |
+| [ADR-0018](0018-ducker-id-sign-in-sau-co-tinh-nang.md) | Đăng nhập Ducker ID tùy chọn, ship tối sau cờ tính năng | 2026-10-04 | accepted |
 <!-- END:auto -->
 
 Trạng thái: `accepted` · `superseded by ADR-00xx` · `deprecated`

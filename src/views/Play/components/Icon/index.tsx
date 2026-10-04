@@ -19,6 +19,7 @@ export type IconName =
   | 'arrowUp'
   | 'close'
   | 'trophy'
+  | 'user'
 
 const PATHS: Record<IconName, { d: string; filled?: boolean }> = {
   pause: { d: 'M6 4h4v16H6zM14 4h4v16h-4z', filled: true },
@@ -39,6 +40,7 @@ const PATHS: Record<IconName, { d: string; filled?: boolean }> = {
   trophy: {
     d: 'M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3M9 20h6M12 14v6',
   },
+  user: { d: 'M20 21a8 8 0 0 0-16 0' },
 }
 
 export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
@@ -57,6 +59,7 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
       focusable="false"
     >
       <path d={icon.d} />
+      {name === 'user' ? <circle cx="12" cy="8" r="4" /> : null}
       {name === 'sliders' ? (
         <>
           <circle cx="9" cy="6" r="2.5" />
