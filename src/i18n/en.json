@@ -84,5 +84,10 @@
   "scores.listLabel": "High scores, {n}",
   "scores.time": "time",
   "scores.freshRow": "your latest round",
-  "scores.clearWarning": "This permanently deletes every score on this board. Press again to confirm."
+  "scores.clearWarning": "This permanently deletes every score on this board. Press again to confirm.",
+  "account.signIn": "Sign in",
+  "account.signingIn": "Signing in…",
+  "account.menu": "Ducker ID account",
+  "account.openProfile": "Open Ducker ID profile",
+  "account.signOut": "Sign out"
 }
