@@ -4,6 +4,10 @@ import { useI18n } from '@/i18n'
 import { Avatar } from '../../components/Avatar'
 import { Icon } from '../../components/Icon'
 
+const GAME_KEYS: ReadonlySet<string> = new Set([
+  'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Enter', 'Home', 'End',
+])
+
 /**
  * The Ducker ID account dialog: who is signed in, a link to their Ducker ID profile
  * and sign out. A dialog over the game, like `SettingsScreen`, rather than a popover:
@@ -45,6 +49,12 @@ export function AccountDialog({
         e.preventDefault()
         e.stopPropagation()
         onClose()
+        return
+      }
+      // Keys the game listens to must not reach it from behind the dialog. Only
+      // propagation is stopped: Space/Enter still activate the focused button.
+      if (GAME_KEYS.has(e.key)) {
+        e.stopPropagation()
         return
       }
       if (e.key !== 'Tab') return

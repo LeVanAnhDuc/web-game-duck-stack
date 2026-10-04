@@ -122,6 +122,28 @@ describe('AccountDialog', () => {
     expect(document.activeElement).toBe(trigger)
   })
 
+  it('keeps keys away from a bubble-phase window game listener while open, and gives them back after', () => {
+    const seen: string[] = []
+    const gameListener = (e: KeyboardEvent) => seen.push(e.key)
+    window.addEventListener('keydown', gameListener)
+    const press = (key: string) =>
+      act(() => {
+        const target = document.activeElement ?? document.body
+        target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }))
+      })
+    try {
+      act(() => root.render(<Slot />))
+      act(() => host.querySelector<HTMLButtonElement>('button[aria-label="Ducker ID account"]')!.click())
+      for (const key of ['ArrowUp', 'ArrowDown', ' ', 'Escape']) press(key)
+      expect(seen).toEqual([])
+      expect(host.querySelector('[role="dialog"]')).toBeNull() // Escape closed it
+      for (const key of ['ArrowUp', 'ArrowDown', ' ', 'Escape']) press(key)
+      expect(seen).toEqual(['ArrowUp', 'ArrowDown', ' ', 'Escape'])
+    } finally {
+      window.removeEventListener('keydown', gameListener)
+    }
+  })
+
   it('after sign-out focus lands on the sign-in button, not on body', () => {
     act(() => root.render(<Slot />))
     act(() => host.querySelector<HTMLButtonElement>('button[aria-label="Ducker ID account"]')!.click())
