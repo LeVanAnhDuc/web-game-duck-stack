@@ -38,6 +38,8 @@ export function AccountButton({
   }
 
   const loading = auth.status === 'loading'
+  // idle = nothing has started yet: same-size inert placeholder, so nothing is clickable early.
+  const idle = auth.status === 'idle'
   return (
     <button
       ref={buttonRef}
@@ -45,7 +47,7 @@ export function AccountButton({
       className="icon-btn icon-btn--account"
       aria-label={loading ? t('account.signingIn') : t('account.signIn')}
       aria-busy={loading}
-      disabled={loading}
+      disabled={loading || idle}
       onClick={auth.signIn}
     >
       <Icon name="user" />

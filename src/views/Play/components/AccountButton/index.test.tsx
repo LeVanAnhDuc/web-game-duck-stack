@@ -71,6 +71,28 @@ describe('AccountButton', () => {
     expect(button.getAttribute('aria-busy')).toBe('true')
   })
 
+  it('is an inert button of the same kind while idle', () => {
+    auth.value = { ...base, status: 'idle', profile: null }
+    mount('en')
+    const button = byLabel('Sign in')!
+    expect(button.disabled).toBe(true)
+    expect(button.className).toContain('icon-btn')
+    act(() => button.click())
+    expect(base.signIn).not.toHaveBeenCalled()
+  })
+
+  it('falls back to the initial when the picture fails to load', () => {
+    auth.value = { ...base, status: 'signed-in', profile: { sub: 'u1', name: 'Le Van Duc', picture: 'http://x/a.png' } }
+    mount('en')
+    const img = host.querySelector('img')!
+    expect(img.getAttribute('referrerpolicy')).toBe('no-referrer')
+    act(() => {
+      img.dispatchEvent(new Event('error'))
+    })
+    expect(host.querySelector('img')).toBeNull()
+    expect(host.querySelector('.avatar')?.textContent).toBe('L')
+  })
+
   it('uses the Vietnamese labels in the vi locale', () => {
     auth.value = { ...base, status: 'signed-out', profile: null }
     mount('vi')

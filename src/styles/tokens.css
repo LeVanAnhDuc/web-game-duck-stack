@@ -262,6 +262,20 @@ body {
   }
 }
 
+/* 320px: even 4px gaps leave the score and level columns narrower than their own
+   labels (measured: 28px and 24px, with horizontal overflow). Square the bar up:
+   no gaps, thinner side padding -- the 44px buttons are untouched. */
+@media (max-width: 359px) {
+  .topbar:has(.icon-btn--account) {
+    gap: 0;
+    padding: 0 4px;
+  }
+  .topbar:has(.icon-btn--account) .topbar__stack .label {
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+  }
+}
+
 a.btn {
   text-decoration: none;
 }
