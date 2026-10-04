@@ -25,8 +25,29 @@ function clearPending(): void {
   }
 }
 
+// A second click while the first is in flight must not mint a second verifier/state.
+let starting = false
+
+// Back from Ducker ID restores this page from bfcache with the flag still true.
+if (typeof window !== 'undefined') {
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) starting = false
+  })
+}
+
 /** Builds the authorize URL and sends the whole page to Ducker ID. */
 export async function startLogin(config: DuckerConfig): Promise<void> {
+  if (starting) return
+  starting = true
+  try {
+    await beginLogin(config)
+  } catch (error) {
+    starting = false
+    throw error
+  }
+}
+
+async function beginLogin(config: DuckerConfig): Promise<void> {
   const verifier = randomUrlSafeToken()
   const state = randomUrlSafeToken()
   const pending: PendingAuth = {
@@ -37,6 +58,7 @@ export async function startLogin(config: DuckerConfig): Promise<void> {
   try {
     sessionStorage.setItem(DUCKER_PKCE_KEY, JSON.stringify(pending))
   } catch {
+    starting = false
     return // no place to keep the verifier means the callback could never finish
   }
   const url = new URL('/oauth/authorize', config.issuer)
@@ -112,6 +134,7 @@ export function capturedCallback(): CallbackResult | null {
 export function resetCaptureForTests(): void {
   captured = null
   didCapture = false
+  starting = false
 }
 
 // With the feature off this module never even reads location.search.

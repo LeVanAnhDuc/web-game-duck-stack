@@ -133,6 +133,18 @@ describe('AccountDialog', () => {
     expect(document.activeElement).not.toBe(document.body)
   })
 
+  it('shows the email as the main line when there is no name, and no email line when there is no email', () => {
+    auth.value = { ...base, profile: { sub: 'u1', email: 'duc@ducker.id' } }
+    mount()
+    expect(host.querySelector('.account__name')?.textContent).toBe('duc@ducker.id')
+    expect(host.querySelector('.account__email')).toBeNull()
+    act(() => root.render(<div />))
+    auth.value = { ...base, profile: { sub: 'u1', name: 'Le Van Duc' } }
+    mount()
+    expect(host.querySelector('.account__name')?.textContent).toBe('Le Van Duc')
+    expect(host.querySelector('.account__email')).toBeNull()
+  })
+
   it('renders nothing without a signed-in profile', () => {
     auth.value = { ...base, status: 'signed-out', profile: null }
     mount()

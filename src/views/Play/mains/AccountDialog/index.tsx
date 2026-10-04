@@ -88,8 +88,11 @@ export function AccountDialog({
         <div className="account">
           <Avatar profile={profile} large />
           <div className="account__who">
-            {profile.name ? <p className="account__name">{profile.name}</p> : null}
-            {profile.email ? <p className="account__email">{profile.email}</p> : null}
+            {/* No name: the email becomes the main line. No email: no email line. */}
+            {profile.name || profile.email ? (
+              <p className="account__name">{profile.name || profile.email}</p>
+            ) : null}
+            {profile.name && profile.email ? <p className="account__email">{profile.email}</p> : null}
           </div>
         </div>
 

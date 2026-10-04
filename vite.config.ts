@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
     // VITE_BASE_PATH is "/" locally and "/<repo>/" in the deploy workflow; unset means
     // the Vite default, the site root. An absolute base replaces the relative './' of
     // ADR-0001 because the OAuth redirect_uri needs a known app root (ADR-0018).
+    // Explicit branch: an empty VITE_BASE_PATH= line must mean the site root, never ''.
     ...(env.VITE_BASE_PATH ? { base: env.VITE_BASE_PATH } : {}),
     // Alias @/ -> src/ (R-13). Phai khai o CA HAI cho: tsconfig cho tsc, cho nay cho
     // Vite va Vitest — thieu mot ben thi mot trong hai im lang khong hieu duong dan.

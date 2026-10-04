@@ -85,6 +85,7 @@ describe('startLogin', () => {
   const assign = vi.fn()
 
   beforeEach(() => {
+    resetCaptureForTests() // also re-arms the in-flight guard
     sessionStorage.clear()
     assign.mockClear()
     vi.stubGlobal('location', {
@@ -113,6 +114,31 @@ describe('startLogin', () => {
     expect(url.searchParams.get('state')).toBe(pending.state)
     expect(url.searchParams.get('code_challenge_method')).toBe('S256')
     expect(url.searchParams.get('code_challenge')).toMatch(/^[A-Za-z0-9_-]{43}$/)
+  })
+
+  it('ignores a second call while one is in flight: one redirect', async () => {
+    await Promise.all([startLogin(config), startLogin(config)])
+    expect(assign).toHaveBeenCalledTimes(1)
+  })
+
+  it('re-arms after a bfcache restore (pageshow persisted) so sign-in works again', async () => {
+    await startLogin(config)
+    await startLogin(config)
+    expect(assign).toHaveBeenCalledTimes(1)
+    const evt = new Event('pageshow')
+    Object.defineProperty(evt, 'persisted', { value: true })
+    window.dispatchEvent(evt)
+    await startLogin(config)
+    expect(assign).toHaveBeenCalledTimes(2)
+  })
+
+  it('does not re-arm on a normal pageshow', async () => {
+    await startLogin(config)
+    const evt = new Event('pageshow')
+    Object.defineProperty(evt, 'persisted', { value: false })
+    window.dispatchEvent(evt)
+    await startLogin(config)
+    expect(assign).toHaveBeenCalledTimes(1)
   })
 
   it('does not redirect when sessionStorage throws', async () => {
