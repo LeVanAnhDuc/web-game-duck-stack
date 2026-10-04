@@ -251,9 +251,9 @@ body {
 }
 
 /* A seventh item in the 375px top bar leaves no room for the usual 16px gaps, and
-   flex would shrink the 44px targets instead. Tighten the gaps only when the
-   account button is present, and never let an icon button shrink. */
-.topbar > .icon-btn {
+   flex would shrink the 44px targets instead. Both rules below apply only when the
+   account button is present (flag on): the flag-off bar must stay exactly as it was. */
+.topbar:has(.icon-btn--account) > .icon-btn {
   flex: 0 0 auto;
 }
 @media (max-width: 767px) {
