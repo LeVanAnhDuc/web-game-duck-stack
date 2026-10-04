@@ -5,7 +5,7 @@
 [![Release](https://img.shields.io/github/v/release/LeVanAnhDuc/web-game-duck-stack?sort=semver)](https://github.com/LeVanAnhDuc/web-game-duck-stack/releases)
 
 Duck Stack is Tetris on the modern Guideline, running entirely in the browser. No
-backend, no account, no install — open the page and play.
+backend, no game accounts, no install — open the page and play.
 
 Built for players who already have Guideline reflexes: full SRS with wall kicks,
 7-bag, hold, ghost piece, lock delay with move reset, T-spin, combo and

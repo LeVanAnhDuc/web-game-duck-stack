@@ -106,7 +106,7 @@ export function consumeCallback(): CallbackResult | null {
 
 /** Only a same-origin path may reach replaceState ("//evil" would throw at load). */
 function isSafeReturnTo(value: unknown): value is string {
-  return typeof value === 'string' && value.startsWith('/') && !value.startsWith('//')
+  return typeof value === 'string' && value.startsWith('/') && !value.startsWith('//') && !value.includes('\\')
 }
 
 let captured: CallbackResult | null = null

@@ -64,7 +64,7 @@ describe('returnTo handling', () => {
     expect(consumeCallback()).toEqual({ error: 'state_mismatch' })
   })
 
-  it.each(['//evil.example/x', 'https://evil.example/', 'relative', 42])('drops an unsafe returnTo (%s)', (returnTo) => {
+  it.each(['/\\evil', '//evil.example/x', 'https://evil.example/', 'relative', 42])('drops an unsafe returnTo (%s)', (returnTo) => {
     sessionStorage.setItem('ducker.pkce', JSON.stringify({ state: 's1', verifier: 'v1', returnTo }))
     window.history.replaceState(null, '', '/?code=c1&state=s1')
     expect(consumeCallback()).toEqual({ code: 'c1', verifier: 'v1' })

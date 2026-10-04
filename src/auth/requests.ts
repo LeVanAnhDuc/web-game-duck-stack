@@ -33,5 +33,23 @@ export async function fetchProfile(config: DuckerConfig, accessToken: string): P
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   })
   if (!response.ok) throw new Error(`userinfo_failed_${response.status}`)
-  return (await response.json()) as DuckerProfile
+  const data: unknown = await response.json().catch(() => null)
+  if (!isProfile(data)) throw new Error('userinfo_invalid')
+  return data
+}
+
+const optionalString = (v: unknown) => v === undefined || v === null || typeof v === 'string'
+
+/** A malformed userinfo must end signed-out, never crash rendering. */
+function isProfile(data: unknown): data is DuckerProfile {
+  if (typeof data !== 'object' || data === null) return false
+  const p = data as Record<string, unknown>
+  return (
+    typeof p.sub === 'string' &&
+    p.sub !== '' &&
+    optionalString(p.name) &&
+    optionalString(p.email) &&
+    optionalString(p.picture) &&
+    (p.email_verified === undefined || typeof p.email_verified === 'boolean')
+  )
 }

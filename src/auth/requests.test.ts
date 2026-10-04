@@ -57,6 +57,19 @@ describe('fetchProfile', () => {
     expect(init.signal).toBeInstanceOf(AbortSignal)
   })
 
+  it('accepts a minimal { sub } profile', async () => {
+    stub(json({ sub: 'u1' }))
+    await expect(fetchProfile(config, 't')).resolves.toEqual({ sub: 'u1' })
+  })
+
+  it.each([null, { sub: '' }, { sub: 'u1', name: 5 }, { sub: 'u1', email: {} }, { sub: 'u1', picture: 1 }, { sub: 'u1', email_verified: 'yes' }, 'text'])(
+    'throws userinfo_invalid for %o',
+    async (body) => {
+      stub(json(body))
+      await expect(fetchProfile(config, 't')).rejects.toThrow('userinfo_invalid')
+    },
+  )
+
   it('throws on a non-ok response', async () => {
     stub(json({}, 401))
     await expect(fetchProfile(config, 't')).rejects.toThrow('userinfo_failed_401')
