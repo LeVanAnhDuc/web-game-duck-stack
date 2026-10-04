@@ -62,5 +62,8 @@ vi; ADR-0004 vẫn là nơi giải thích vì sao có ba interface async.
 - Khi lên production phải đăng ký client ở admin Ducker ID (redirect URI
   `https://levananhduc.github.io/web-game-duck-stack/`), thêm origin vào `CORS_ORIGINS`, đặt cờ
   và bốn giá trị làm repository variables rồi truyền chúng trong `deploy.yml`.
-- Sau khi đăng xuất từ hộp thoại, tiêu điểm bàn phím không có chỗ về (nút avatar biến mất,
-  nút đăng nhập thay vào chỗ đó) — chấp nhận ở bản ship tối.
+- Sau khi đăng xuất, nút avatar biến mất và nút đăng nhập thay vào đúng chỗ đó; cùng một
+  `ref` trỏ vào cả hai nên tiêu điểm rơi vào nút đăng nhập (qua `onFocusFallback`), không về
+  `<body>`. Có test khẳng định `document.activeElement`.
+- Timeout 15 giây cho cả hai request; lỗi hay treo đều về chưa đăng nhập. `returnTo` được giữ
+  cả khi Ducker ID trả `error` (không giữ khi `state_mismatch`) và chỉ nhận đường dẫn cùng origin.

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act } from 'react'
+import { act, useCallback, useRef, useState } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { I18nProvider } from '@/i18n'
@@ -7,6 +7,7 @@ import { I18nProvider } from '@/i18n'
 const auth = vi.hoisted(() => ({ value: {} as Record<string, unknown> }))
 vi.mock('@/hooks/useDuckerAuth', () => ({ useDuckerAuth: () => auth.value }))
 
+import { AccountButton } from '../../components/AccountButton'
 import { AccountDialog } from './index'
 
 const base = {
@@ -30,6 +31,24 @@ function mount() {
       </I18nProvider>,
     )
   })
+}
+
+/** The real slot: AccountButton + AccountDialog, wired as Play wires them. */
+function Slot() {
+  const [open, setOpen] = useState(false)
+  const [, tick] = useState(0)
+  const ref = useRef<HTMLButtonElement | null>(null)
+  const focusAccount = useCallback(() => ref.current?.focus(), [])
+  base.signOut.mockImplementation(() => {
+    auth.value = { ...base, status: 'signed-out', profile: null }
+    tick((n) => n + 1)
+  })
+  return (
+    <I18nProvider locale="en">
+      <AccountButton onOpen={() => setOpen(true)} buttonRef={ref} />
+      {open ? <AccountDialog onClose={() => setOpen(false)} onFocusFallback={focusAccount} /> : null}
+    </I18nProvider>
+  )
 }
 
 beforeEach(() => {
@@ -89,6 +108,29 @@ describe('AccountDialog', () => {
     act(() => signOut.click())
     expect(base.signOut).toHaveBeenCalledOnce()
     expect(onClose).toHaveBeenCalled()
+  })
+
+  it('Esc closes the dialog and focus returns to the avatar trigger', () => {
+    act(() => root.render(<Slot />))
+    const trigger = host.querySelector<HTMLButtonElement>('button[aria-label="Ducker ID account"]')!
+    act(() => trigger.click())
+    expect(host.querySelector('[role="dialog"]')).not.toBeNull()
+    act(() => {
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    })
+    expect(host.querySelector('[role="dialog"]')).toBeNull()
+    expect(document.activeElement).toBe(trigger)
+  })
+
+  it('after sign-out focus lands on the sign-in button, not on body', () => {
+    act(() => root.render(<Slot />))
+    act(() => host.querySelector<HTMLButtonElement>('button[aria-label="Ducker ID account"]')!.click())
+    const signOut = [...host.querySelectorAll('button')].find((b) => b.textContent === 'Sign out')!
+    act(() => signOut.click())
+    const signIn = host.querySelector<HTMLButtonElement>('button[aria-label="Sign in"]')!
+    expect(signIn).not.toBeNull()
+    expect(document.activeElement).toBe(signIn)
+    expect(document.activeElement).not.toBe(document.body)
   })
 
   it('renders nothing without a signed-in profile', () => {

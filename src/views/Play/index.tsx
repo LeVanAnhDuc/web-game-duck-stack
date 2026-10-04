@@ -245,6 +245,7 @@ export function Play() {
   const focusTrophy = useCallback(() => trophyRef.current?.focus(), [])
   const focusSettings = useCallback(() => settingsBtnRef.current?.focus(), [])
   const accountBtnRef = useRef<HTMLButtonElement | null>(null)
+  const focusAccount = useCallback(() => accountBtnRef.current?.focus(), [])
 
   /** Did OUR opening of a dialog cause the pause? Only then does closing resume. */
   const autoPausedRef = useRef(false)
@@ -465,7 +466,7 @@ export function Play() {
       {settingsOpen ? (
         <SettingsScreen onClose={closeDialog} onFocusFallback={focusSettings} />
       ) : null}
-      {accountOpen ? <AccountDialog onClose={closeDialog} /> : null}
+      {accountOpen ? <AccountDialog onClose={closeDialog} onFocusFallback={focusAccount} /> : null}
       {scoresOpen ? (
         <HighScoresScreen
           onClose={closeDialog}

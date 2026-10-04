@@ -72,9 +72,19 @@ export function consumeCallback(): CallbackResult | null {
     window.location.pathname + (query ? `?${query}` : '') + window.location.hash,
   )
 
-  if (error) return { error }
+  // returnTo is restored on success AND on an IdP error: redirect_uri is the bare app
+  // root, so without it a cancelled sign-in would drop the game's params. Never on
+  // state_mismatch -- that entry is not ours to trust.
+  const returnTo = pending && isSafeReturnTo(pending.returnTo) ? pending.returnTo : undefined
+  const back = returnTo ? { returnTo } : {}
+  if (error) return { error, ...back }
   if (!pending || pending.state !== state) return { error: 'state_mismatch' }
-  return { ...(code ? { code } : {}), verifier: pending.verifier, returnTo: pending.returnTo }
+  return { ...(code ? { code } : {}), verifier: pending.verifier, ...back }
+}
+
+/** Only a same-origin path may reach replaceState ("//evil" would throw at load). */
+function isSafeReturnTo(value: unknown): value is string {
+  return typeof value === 'string' && value.startsWith('/') && !value.startsWith('//')
 }
 
 let captured: CallbackResult | null = null
@@ -85,7 +95,13 @@ export function captureCallback(): void {
   if (didCapture) return
   didCapture = true
   captured = consumeCallback()
-  if (captured?.returnTo) window.history.replaceState(window.history.state, '', captured.returnTo)
+  if (captured?.returnTo) {
+    try {
+      window.history.replaceState(window.history.state, '', captured.returnTo)
+    } catch {
+      // a bad returnTo must never stop the game from loading
+    }
+  }
 }
 
 export function capturedCallback(): CallbackResult | null {

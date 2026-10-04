@@ -10,7 +10,14 @@ import { Icon } from '../../components/Icon'
  * the top bar is too tight at 375px for one, and the game gives up the keyboard
  * while any dialog is open.
  */
-export function AccountDialog({ onClose }: { onClose: () => void }) {
+export function AccountDialog({
+  onClose,
+  onFocusFallback,
+}: {
+  onClose: () => void
+  /** Where focus goes when the control that opened this dialog no longer exists (after sign-out). */
+  onFocusFallback?: (() => void) | undefined
+}) {
   const auth = useDuckerAuth()
   const { t } = useI18n()
   const closeRef = useRef<HTMLButtonElement | null>(null)
@@ -23,8 +30,9 @@ export function AccountDialog({ onClose }: { onClose: () => void }) {
     closeRef.current?.focus()
     return () => {
       if (previous && previous !== document.body && previous.isConnected) previous.focus()
+      else onFocusFallback?.()
     }
-  }, [open])
+  }, [open, onFocusFallback])
 
   // Capture phase on window, as SettingsScreen does: Escape must not reach the game's
   // own listener, which maps it to pause.

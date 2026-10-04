@@ -21,7 +21,8 @@ Ship tối: chỉ bật khi `VITE_FEATURE_DUCKER_SIGN_IN === "true"` và đủ b
 - **Hộp thoại tài khoản** (`mains/AccountDialog`): `.overlay` + `.modal` như `SettingsScreen` —
   tên, email, "Mở hồ sơ Ducker ID" (`target=_blank rel="noopener noreferrer"`), "Đăng xuất".
   Đóng bằng Esc (pha capture, không lọt xuống phím Esc = pause của game), bấm nền, nút đóng,
-  hoặc chọn một mục; tiêu điểm trả về nút avatar; Tab quay vòng trong hộp.
+  hoặc chọn một mục; tiêu điểm trả về nút avatar (Esc) hoặc, sau đăng xuất, nút đăng nhập ở cùng
+  chỗ (cùng `ref`, `onFocusFallback`) — không bao giờ về `<body>`; Tab quay vòng trong hộp.
   Nút avatar mang `aria-haspopup="dialog"` (không phải `menu`: đây là dialog, không phải popover).
 - **Tạm dừng:** mở hộp thoại giữa ván tự tạm dừng và đóng thì chạy tiếp, cùng quy tắc
   `shouldAutoPause` như Cài đặt / Bảng điểm (ADR-0017), vì `anyDialogOpen` tắt phím của game.

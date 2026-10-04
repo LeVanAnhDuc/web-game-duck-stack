@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { consumeCallback, startLogin } from './flow'
+import { captureCallback, consumeCallback, resetCaptureForTests, startLogin } from './flow'
 
 const config = {
   issuer: 'http://localhost:3000',
@@ -43,6 +43,41 @@ describe('consumeCallback', () => {
     window.history.replaceState(null, '', '/?error=access_denied&error_description=no&state=s1')
     expect(consumeCallback()).toEqual({ error: 'access_denied' })
     expect(window.location.search).toBe('')
+  })
+})
+
+describe('returnTo handling', () => {
+  beforeEach(() => {
+    sessionStorage.clear()
+    resetCaptureForTests()
+  })
+
+  it('returns returnTo on an IdP error so the game params survive a denied sign-in', () => {
+    sessionStorage.setItem('ducker.pkce', JSON.stringify({ state: 's1', verifier: 'v1', returnTo: '/?level=3' }))
+    window.history.replaceState(null, '', '/?error=access_denied&state=s1')
+    expect(consumeCallback()).toEqual({ error: 'access_denied', returnTo: '/?level=3' })
+  })
+
+  it('never returns returnTo on state_mismatch', () => {
+    sessionStorage.setItem('ducker.pkce', JSON.stringify({ state: 's1', verifier: 'v1', returnTo: '/?level=3' }))
+    window.history.replaceState(null, '', '/?code=c1&state=evil')
+    expect(consumeCallback()).toEqual({ error: 'state_mismatch' })
+  })
+
+  it.each(['//evil.example/x', 'https://evil.example/', 'relative', 42])('drops an unsafe returnTo (%s)', (returnTo) => {
+    sessionStorage.setItem('ducker.pkce', JSON.stringify({ state: 's1', verifier: 'v1', returnTo }))
+    window.history.replaceState(null, '', '/?code=c1&state=s1')
+    expect(consumeCallback()).toEqual({ code: 'c1', verifier: 'v1' })
+  })
+
+  it('captureCallback restores returnTo once; a second call is a no-op', () => {
+    sessionStorage.setItem('ducker.pkce', JSON.stringify({ state: 's1', verifier: 'v1', returnTo: '/?level=3' }))
+    window.history.replaceState(null, '', '/?code=c1&state=s1')
+    captureCallback()
+    expect(window.location.pathname + window.location.search).toBe('/?level=3')
+    window.history.replaceState(null, '', '/?other=1')
+    captureCallback()
+    expect(window.location.search).toBe('?other=1')
   })
 })
 

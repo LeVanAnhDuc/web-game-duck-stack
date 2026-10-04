@@ -7,7 +7,8 @@ import { Icon } from '../Icon'
 /**
  * The top-bar entry point for optional Ducker ID sign-in. Renders nothing at all
  * while the feature is off, so the bar is exactly what it was before it existed.
- * Signed in, it is the avatar and opens the account dialog; the dialog itself lives
+ * The same ref points at whichever button is showing, so focus can land in this slot
+ * after sign-out. Signed in, it is the avatar and opens the account dialog; the dialog itself lives
  * in `Play` so opening it can pause the round like the other dialogs do.
  */
 export function AccountButton({
@@ -39,6 +40,7 @@ export function AccountButton({
   const loading = auth.status === 'loading'
   return (
     <button
+      ref={buttonRef}
       type="button"
       className="icon-btn icon-btn--account"
       aria-label={loading ? t('account.signingIn') : t('account.signIn')}
