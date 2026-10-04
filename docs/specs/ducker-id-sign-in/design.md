@@ -56,7 +56,7 @@ Ship tối: chỉ bật khi `VITE_FEATURE_DUCKER_SIGN_IN === "true"` và đủ b
 
 ADR-0004 bị thay **một câu** (nút nay chạy được, biến môi trường nay có); `DuckerIdIdentity`
 vẫn không được viết. nfr.md §Data & Privacy có ngoại lệ có giới hạn: `sessionStorage` khoá
-`ducker.pkce` xoá khi quay về; mạng chỉ tới issuer đã cấu hình và chỉ sau khi bấm đăng nhập; cờ
+`ducker.pkce` xoá khi quay về; mạng chỉ tới issuer đã cấu hình và tới URL ảnh đại diện mà nó trả về (có thể ở host khác, ảnh không bị hạn chế) và chỉ sau khi bấm đăng nhập; cờ
 tắt thì không đọc URL, không chạm storage, không request. Repo này không có test lưới
 "không request ngoài" hay grep `fetch` nên không cần allowlist.
 

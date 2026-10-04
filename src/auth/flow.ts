@@ -42,6 +42,7 @@ export async function startLogin(config: DuckerConfig): Promise<void> {
   try {
     await beginLogin(config)
   } catch (error) {
+    clearPending() // a verifier left behind for a login that never started is dead weight
     starting = false
     throw error
   }

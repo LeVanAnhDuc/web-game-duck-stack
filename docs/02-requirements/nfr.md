@@ -96,7 +96,7 @@ replay — nằm trong `localStorage` **trên máy người dùng** và không �
 không có PII nào do dự án này lưu giữ.
 
 **Ngoại lệ có giới hạn: đăng nhập Ducker ID tùy chọn (ADR-0018).** Chỉ `sessionStorage` khoá
-`ducker.pkce`, xoá khi quay về từ Ducker ID; mạng chỉ tới issuer đã cấu hình, chỉ sau khi
+`ducker.pkce`, xoá khi quay về từ Ducker ID; mạng chỉ tới issuer đã cấu hình và tới URL ảnh đại diện mà nó trả về (có thể ở host khác, ảnh không bị hạn chế), chỉ sau khi
 người chơi bấm đăng nhập; cờ tắt (bản deploy) thì không đọc `location.search`, không chạm
 storage, không request nào. Hồ sơ (`sub`, tên, email, ảnh) chỉ nằm trong bộ nhớ, tải lại là
 đăng xuất. Điểm, thiết lập và replay vẫn không rời máy.

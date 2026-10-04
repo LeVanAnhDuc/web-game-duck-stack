@@ -32,7 +32,7 @@ chạm vào điểm hay thiết lập.
 - Không thêm dependency.
 
 **Ngoại lệ có giới hạn cho "không dữ liệu rời máy" (nfr.md §Data & Privacy):** chỉ
-`sessionStorage` khoá `ducker.pkce`, xoá khi quay về; mạng chỉ tới issuer đã cấu hình, chỉ sau
+`sessionStorage` khoá `ducker.pkce`, xoá khi quay về; mạng chỉ tới issuer đã cấu hình và tới URL ảnh đại diện mà nó trả về (có thể ở host khác, ảnh không bị hạn chế), chỉ sau
 khi người chơi bấm đăng nhập; cờ tắt thì không đọc `location.search`, không chạm storage, không
 gửi request nào. Hồ sơ (`sub`, tên, email, ảnh) chỉ nằm trong bộ nhớ — tải lại là đăng xuất.
 
