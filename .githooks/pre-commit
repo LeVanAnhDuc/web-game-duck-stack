@@ -18,14 +18,25 @@ set -uo pipefail
 
 cd "$(git rev-parse --show-toplevel)" || exit 1
 
-# Khong co gi trong .ts/.tsx bi doi thi khong can kiem kieu.
-if ! git diff --cached --name-only --diff-filter=ACMR -- '*.ts' '*.tsx' | grep -q .; then
-  exit 0
-fi
+# Moi package mot cay kieu rieng: client/ (game) va automation-testing/ (bo test hoi
+# quy). Chi kiem package co file .ts/.tsx staged — va chi khi package do da cai
+# dependency, vi `tsc` cua no nam trong node_modules cua chinh no.
+check() {
+  dir="$1"
+  if ! git diff --cached --name-only --diff-filter=ACMR -- "$dir/*.ts" "$dir/*.tsx" | grep -q .; then
+    return 0
+  fi
+  if [ ! -d "$dir/node_modules" ]; then
+    printf '  pre-commit: bo qua typecheck cua %s/ (chua pnpm install)\n' "$dir" >&2
+    return 0
+  fi
+  if ! (cd "$dir" && pnpm --silent typecheck); then
+    printf '\n  Commit bi chan: tsc bao loi kieu trong %s/.\n' "$dir" >&2
+    printf '  Xem lai        : cd %s && pnpm typecheck\n' "$dir" >&2
+    printf '  Bo qua co chu dich (hiem): git commit --no-verify\n\n' >&2
+    return 1
+  fi
+}
 
-if ! pnpm --silent typecheck; then
-  printf '\n  Commit bi chan: tsc bao loi kieu.\n' >&2
-  printf '  Xem lai        : pnpm typecheck\n' >&2
-  printf '  Bo qua co chu dich (hiem): git commit --no-verify\n\n' >&2
-  exit 1
-fi
+check client || exit 1
+check automation-testing || exit 1

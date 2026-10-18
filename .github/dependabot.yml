@@ -1,0 +1,22 @@
+# Weekly dependency updates. The game lives in client/ and the regression suite in
+# automation-testing/, each with its own package.json and pnpm-lock.yaml, so each is
+# watched on its own; workflow actions are watched from the root.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /client
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: npm
+    directory: /automation-testing
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

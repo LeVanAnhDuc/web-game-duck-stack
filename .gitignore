@@ -8,10 +8,18 @@
 .env.*
 !.env.example
 
-# Toolchain
+# Toolchain — unanchored, so they match inside client/ and automation-testing/ too.
 node_modules/
 dist/
 coverage/
+# Builds the regression suite serves (client/scripts/build-e2e.mjs).
+client/.e2e/
+
+# automation-testing/ — Playwright outputs. Its own .gitignore repeats these; listed
+# here as well so a run from the root never leaves them untracked.
+test-results/
+playwright-report/
+blob-report/
 
 # --- Claude Code: theo doi config + skills, bo qua worktrees/doc-state ---
 /.claude/*

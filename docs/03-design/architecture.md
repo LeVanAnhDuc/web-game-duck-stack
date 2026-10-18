@@ -30,7 +30,7 @@ graph LR
 ```
 
 Không có backend, không có database, không có analytics. Mũi tên tới Ducker ID là
-đường **tùy chọn và đang tắt ở bản deploy** (ADR-0018): mã ở `src/auth/`, chỉ lấy danh tính,
+đường **tùy chọn và đang tắt ở bản deploy** (ADR-0018): mã ở `client/src/auth/`, chỉ lấy danh tính,
 trình duyệt gọi thẳng `/oauth/token` và `/oauth/userinfo`. Nó **không** đi qua `identity/`.
 
 ## 2. Container — hệ thống gồm những khối chạy được nào
@@ -120,10 +120,10 @@ Hai ranh giới dễ bị phá nhất, ghi rõ để khỏi phải suy luận l�
 | Vẽ bàn chơi | Canvas 2D | ADR-0003 |
 | Vòng lặp | `requestAnimationFrame` + fixed-timestep, chạy ngoài React | ADR-0003 |
 | Lưu trữ | `localStorage` sau interface async | ADR-0004 |
-| Định danh | `LocalIdentity` (nickname); đăng nhập Ducker ID tùy chọn ở `src/auth/`, tắt ở bản deploy | ADR-0004 · ADR-0018 |
+| Định danh | `LocalIdentity` (nickname); đăng nhập Ducker ID tùy chọn ở `client/src/auth/`, tắt ở bản deploy | ADR-0004 · ADR-0018 |
 | DAS/ARR | tính trong `engine/` | ADR-0005 |
 | i18n | lớp `t()` tự viết, 2 locale `en`/`vi` | ADR-0006 |
 | Hosting | GitHub Pages, file tĩnh | ADR-0001 |
 
 Phiên bản cụ thể của React/Vite/Vitest được chốt lúc scaffold và nằm trong
-`package.json` — không chép số phiên bản vào đây để hai bản không lệch nhau.
+`client/package.json` — không chép số phiên bản vào đây để hai bản không lệch nhau.
