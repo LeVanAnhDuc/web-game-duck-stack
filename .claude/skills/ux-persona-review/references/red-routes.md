@@ -39,7 +39,7 @@ Với những route đó, bỏ trống ô hiệu suất trong báo cáo và ghi 
 - `status`: live
 - `derived_from`: `docs/01-product/journeys.md:18` (US-01 bước 1→4) ·
   `docs/02-requirements/scope.md:23` (FR-01) · `docs/02-requirements/scope.md:32` (FR-10) ·
-  `docs/02-requirements/scope.md:37` (FR-15) · `src/views/Play/index.tsx:412` (thanh `hints`)
+  `docs/02-requirements/scope.md:37` (FR-15) · `client/src/views/Play/index.tsx:412` (thanh `hints`)
 
 ## RR-02 · Chết, hiểu mình vừa được gì, rồi chơi lại
 
@@ -55,7 +55,7 @@ Với những route đó, bỏ trống ô hiệu suất trong báo cáo và ghi 
 - `status`: live
 - `derived_from`: `docs/01-product/journeys.md:18` (US-01 bước 8) ·
   `docs/01-product/journeys.md:89` (US-03 bước 1 và 3) · `docs/02-requirements/scope.md:34`
-  (FR-12) · `docs/02-requirements/scope.md:53` (FR-31) · `src/views/Play/index.tsx:148`
+  (FR-12) · `docs/02-requirements/scope.md:53` (FR-31) · `client/src/views/Play/index.tsx:148`
   (`GameOverModal`)
 
 ## RR-03 · Tạm dừng giữa ván rồi chơi tiếp đúng chỗ
@@ -73,7 +73,7 @@ Với những route đó, bỏ trống ô hiệu suất trong báo cáo và ghi 
 - `status`: live
 - `derived_from`: `docs/01-product/journeys.md:18` (US-01 bước 7) ·
   `docs/02-requirements/scope.md:35` (FR-13) · `docs/02-requirements/nfr.md:85` (NFR-REL-01) ·
-  `src/views/Play/index.tsx:112` (`PausedModal`)
+  `client/src/views/Play/index.tsx:112` (`PausedModal`)
 
 ## RR-04 · Đổi phím về đúng thói quen của tay mình
 
@@ -90,7 +90,7 @@ Với những route đó, bỏ trống ô hiệu suất trong báo cáo và ghi 
 - `status`: live
 - `derived_from`: `docs/01-product/journeys.md:57` (US-02 bước 2) ·
   `docs/02-requirements/scope.md:45` (FR-23) · `docs/01-product/overview.md` §6.3 ·
-  `src/views/Play/mains/SettingsScreen/index.tsx:92` (nút rebind)
+  `client/src/views/Play/mains/SettingsScreen/index.tsx:92` (nút rebind)
 
 ## RR-05 · Chỉnh DAS và ARR cho khớp tay
 
@@ -108,7 +108,7 @@ Với những route đó, bỏ trống ô hiệu suất trong báo cáo và ghi 
 - `status`: live
 - `derived_from`: `docs/01-product/journeys.md:57` (US-02 bước 3) ·
   `docs/02-requirements/scope.md:46` (FR-24) ·
-  `src/views/Play/mains/SettingsScreen/index.tsx:248` (thanh trượt DAS/ARR)
+  `client/src/views/Play/mains/SettingsScreen/index.tsx:248` (thanh trượt DAS/ARR)
 
 ## RR-06 · Đọc giao diện bằng tiếng của mình
 
@@ -126,7 +126,7 @@ Với những route đó, bỏ trống ô hiệu suất trong báo cáo và ghi 
 - `status`: live
 - `derived_from`: `docs/01-product/journeys.md:57` (US-02 bước 4) ·
   `docs/02-requirements/scope.md:50` (FR-28) · `docs/02-requirements/nfr.md:78` (NFR-I18N-03) ·
-  `src/views/Play/index.tsx:339` (nút ngôn ngữ mở cài đặt)
+  `client/src/views/Play/index.tsx:339` (nút ngôn ngữ mở cài đặt)
 
 ## RR-07 · Chơi được khi không phân biệt được màu khối
 
@@ -162,7 +162,7 @@ Với những route đó, bỏ trống ô hiệu suất trong báo cáo và ghi 
 - `status`: live
 - `derived_from`: `docs/01-product/journeys.md:89` (US-03 bước 2) ·
   `docs/02-requirements/scope.md:54` (FR-32) · `docs/02-requirements/scope.md:56` (FR-34) ·
-  `src/scores/index.tsx:168` (tên được chụp lúc `submit`) ·
+  `client/src/scores/index.tsx:168` (tên được chụp lúc `submit`) ·
   `docs/decisions/0014-per-difficulty-score-boards-and-local-nickname.md`
 
 ## RR-09 · Chơi bằng cảm ứng trên điện thoại, mạng chậm
@@ -180,7 +180,7 @@ Với những route đó, bỏ trống ô hiệu suất trong báo cáo và ghi 
 - `status`: live
 - `derived_from`: `docs/01-product/journeys.md:18` (US-01 §Điều gì có thể sai) ·
   `docs/02-requirements/scope.md:38` (FR-16) · `docs/02-requirements/nfr.md:67` (NFR-A11Y-03) ·
-  `src/views/Play/index.tsx:396` (`touchband`)
+  `client/src/views/Play/index.tsx:396` (`touchband`)
 
 ## RR-10 · Xoá sạch một bảng điểm cao
 
@@ -195,7 +195,7 @@ Với những route đó, bỏ trống ô hiệu suất trong báo cáo và ghi 
   xác nhận hai bước, nên câu hỏi là persona có hiểu mình vừa xoá cái gì — một bảng, hay tất cả
 - `status`: live
 - `derived_from`: `docs/02-requirements/scope.md:54` (FR-32) ·
-  `src/views/Play/mains/HighScoresScreen/index.tsx:250` (`scores.clear` → `scores.clearConfirm`)
+  `client/src/views/Play/mains/HighScoresScreen/index.tsx:250` (`scores.clear` → `scores.clearConfirm`)
 
 ---
 

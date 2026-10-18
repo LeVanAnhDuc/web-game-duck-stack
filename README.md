@@ -65,19 +65,29 @@ those two numbers as part of the controls, not as a preference.
 
 ## Commands
 
+The game lives in `client/`; the end-to-end regression suite in `automation-testing/`.
+
 ```bash
+cd client
 pnpm install --frozen-lockfile
 pnpm dev        # dev server
 pnpm test       # unit tests
 pnpm typecheck  # tsc, no emit
-pnpm build      # typecheck + production build into dist/
+pnpm build      # typecheck + production build into client/dist/
 pnpm preview    # serve the production build
+```
+
+```bash
+cd automation-testing     # after the client install above: the suite builds and serves ../client
+pnpm install && pnpm exec playwright install chromium
+pnpm test                 # every module, against a production build of the game
+pnpm coverage:check       # requirement <-> test case <-> spec traceability
 ```
 
 Uses **pnpm**. ADR-0001 picked npm and its reasoning — one package manager across
 gen-2, never Yarn — still holds; the workspace moved that one manager to pnpm on
 2026-09-13, and `pnpm-lock.yaml` was imported from the npm lockfile, so the resolved
-versions are unchanged. Copy [`.env.example`](.env.example) to `.env` only to
+versions are unchanged. Copy [`client/.env.example`](client/.env.example) to `client/.env` only to
 try the optional Ducker ID sign-in locally (`VITE_FEATURE_DUCKER_SIGN_IN`, the four
 `VITE_DUCKER_*` values, and the redirect URIs to register); with none of it set the game
 needs no configuration and shows no sign-in button.
@@ -86,13 +96,14 @@ needs no configuration and shows no sign-in button.
 
 | Folder | Holds |
 | --- | --- |
-| `src/engine/` | Every rule, as pure functions. No DOM, no clock, no `Math.random` |
-| `src/runtime/` | The fixed-timestep loop, the round lifecycle, replay recording |
-| `src/input/` | Keyboard and touch, reporting presses and releases only |
-| `src/render/` | Canvas renderer and its pre-rendered cell sprites |
-| `src/i18n/` | Two flat locale files and a `t()` |
-| `src/auth/` | Optional Ducker ID sign-in: config, PKCE, callback capture, session store (ADR-0018) |
-| `src/ui/` | React: screens, HUD, modals |
+| `client/src/engine/` | Every rule, as pure functions. No DOM, no clock, no `Math.random` |
+| `client/src/runtime/` | The fixed-timestep loop, the round lifecycle, replay recording |
+| `client/src/input/` | Keyboard and touch, reporting presses and releases only |
+| `client/src/render/` | Canvas renderer and its pre-rendered cell sprites |
+| `client/src/i18n/` | Two flat locale files and a `t()` |
+| `client/src/auth/` | Optional Ducker ID sign-in: config, PKCE, callback capture, session store (ADR-0018) |
+| `client/src/views/` | React: screens, HUD, modals |
+| `automation-testing/` | The Playwright regression suite: requirements, test cases, defects, specs |
 
 The engine is deterministic on purpose: a whole game is described by a seed plus the
 commands and the ticks they arrived on. That is what makes replays reproducible, what
@@ -104,7 +115,7 @@ validation possible later without writing the rules a second time.
 Every push to `main` creates a GitHub Release by itself
 ([`.github/workflows/release.yml`](.github/workflows/release.yml)), and deploys to
 **<https://levananhduc.github.io/web-game-duck-stack/>**
-([`deploy.yml`](.github/workflows/deploy.yml)). Pull requests run tests, a build and
+([`deploy.yml`](.github/workflows/deploy.yml)). Pull requests run tests, a build, the regression suite and
 an audit first ([`ci.yml`](.github/workflows/ci.yml)).
 
 Pages has to be enabled **once per repository** before the first deploy can succeed —
@@ -159,7 +170,8 @@ direct commits.
 Both halves run locally, so you can see what a release will say before it says it:
 
 ```bash
-pnpm release:next     # which tag the next release would get
+cd client
+pnpm release:next     # which tag the next release would get (git-cliff reads the whole repo)
 pnpm release:notes    # what its notes would say
 ```
 

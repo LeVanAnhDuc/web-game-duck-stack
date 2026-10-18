@@ -178,7 +178,7 @@ dùng điện thoại trên mạng chậm.
 | Alan Klement — job story *"When \_\_\_, I want to \_\_\_, so I can \_\_\_"* | lấy qua kết quả tìm kiếm; bài gốc trên Medium trả 403 |
 | David Travis / Userfocus — Red Routes (tần suất × mức nghiêm trọng, đặt ra năm 2006) | <https://www.userfocus.co.uk/articles/redroutes.html> trả **403**; định nghĩa lấy qua kết quả tìm kiếm |
 | TETR.IO FAQ + Jstris guide + r/Tetris — DAS/ARR/SDF, finesse, "0 ARR, DAS 60–100ms" | lấy qua kết quả tìm kiếm; dùng cho phần 6b |
-| tetris.wiki — *Tetris Guideline* | trả **403**. Từ vựng ở phần 6a vì vậy lấy từ chính repo (`src/i18n/en.json`, `docs/01-product/glossary.md`) chứ không từ wiki |
+| tetris.wiki — *Tetris Guideline* | trả **403**. Từ vựng ở phần 6a vì vậy lấy từ chính repo (`client/src/i18n/en.json`, `docs/01-product/glossary.md`) chứ không từ wiki |
 
 **Hai nguồn trả 403 và một nguồn không có nguyên văn** — đó là lý do bảng này tồn tại thay vì
 một dòng "đã fetch". Muốn lấy lại: `install.sh <project> --refresh-rules` rồi làm lại Bước 4

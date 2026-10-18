@@ -13,17 +13,27 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# The game app lives in client/; automation-testing/ sets its own directory per step.
+defaults:
+  run:
+    working-directory: client
+
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          # The app lives in client/; without this the action looks for a
+          # package.json at the root and finds none.
+          package_json_file: client/package.json
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
+          cache-dependency-path: client/pnpm-lock.yaml
 
       # `pnpm install --frozen-lockfile` and not a bare `pnpm install`: the
       # lockfile is the answer, and the workspace has already been bitten by a
@@ -61,6 +71,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          # The app lives in client/; without this the action looks for a
+          # package.json at the root and finds none.
+          package_json_file: client/package.json
 
       - uses: actions/setup-node@v4
         with:
