@@ -2,7 +2,7 @@
 
 > **Trả lời:** Hệ thống ghép lại thế nào, ranh giới giữa các phần ở đâu?
 > **Trạng thái:** 🟢 đủ
-> **Cập nhật:** 2026-09-03 · commit d171af7
+> **Cập nhật:** 2026-10-04
 > **Cập nhật khi:** thêm/bỏ một module hoặc service · đổi cách hai module nói chuyện
 
 <!-- CÁCH ĐIỀN
@@ -26,11 +26,12 @@ graph LR
   Player[Người chơi] --> App[Duck Stack<br/>chạy trong browser]
   App --> LS[(localStorage<br/>của browser)]
   App -.- Pages[GitHub Pages<br/>chỉ phục vụ file tĩnh]
-  App -. "chưa nối — ADR-0004" .-> Ducker[Ducker ID<br/>IdP của ecosystem]
+  App -. "tùy chọn, sau cờ, tắt ở bản deploy — ADR-0018" .-> Ducker[Ducker ID<br/>IdP của ecosystem]
 ```
 
 Không có backend, không có database, không có analytics. Mũi tên tới Ducker ID là
-đường **chưa tồn tại** — vẽ ra vì nó quyết định hình dạng của `identity/` hôm nay.
+đường **tùy chọn và đang tắt ở bản deploy** (ADR-0018): mã ở `src/auth/`, chỉ lấy danh tính,
+trình duyệt gọi thẳng `/oauth/token` và `/oauth/userinfo`. Nó **không** đi qua `identity/`.
 
 ## 2. Container — hệ thống gồm những khối chạy được nào
 
@@ -119,7 +120,7 @@ Hai ranh giới dễ bị phá nhất, ghi rõ để khỏi phải suy luận l�
 | Vẽ bàn chơi | Canvas 2D | ADR-0003 |
 | Vòng lặp | `requestAnimationFrame` + fixed-timestep, chạy ngoài React | ADR-0003 |
 | Lưu trữ | `localStorage` sau interface async | ADR-0004 |
-| Định danh | `LocalIdentity`; Ducker ID hoãn | ADR-0004 |
+| Định danh | `LocalIdentity` (nickname); đăng nhập Ducker ID tùy chọn ở `src/auth/`, tắt ở bản deploy | ADR-0004 · ADR-0018 |
 | DAS/ARR | tính trong `engine/` | ADR-0005 |
 | i18n | lớp `t()` tự viết, 2 locale `en`/`vi` | ADR-0006 |
 | Hosting | GitHub Pages, file tĩnh | ADR-0001 |

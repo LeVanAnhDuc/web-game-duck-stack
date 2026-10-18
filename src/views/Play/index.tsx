@@ -11,6 +11,8 @@ import { useScores } from '@/scores'
 import { useSettings } from '@/settings'
 import { HighScoresScreen } from './mains/HighScoresScreen'
 import { SettingsScreen } from './mains/SettingsScreen'
+import { AccountDialog } from './mains/AccountDialog'
+import { AccountButton } from './components/AccountButton'
 import { useGameSession, type HudSnapshot } from '@/hooks/useGameSession'
 
 /**
@@ -204,7 +206,8 @@ export function Play() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [scoresOpen, setScoresOpen] = useState(false)
-  const anyDialogOpen = settingsOpen || scoresOpen
+  const [accountOpen, setAccountOpen] = useState(false)
+  const anyDialogOpen = settingsOpen || scoresOpen || accountOpen
   // The game gives the keyboard up while a dialog is open, so its sliders, buttons
   // and the nickname field work (NFR-A11Y-02).
   const { hud, send, press, restart, livePhase } = useGameSession(canvasRef, !anyDialogOpen)
@@ -241,6 +244,8 @@ export function Play() {
   const settingsBtnRef = useRef<HTMLButtonElement | null>(null)
   const focusTrophy = useCallback(() => trophyRef.current?.focus(), [])
   const focusSettings = useCallback(() => settingsBtnRef.current?.focus(), [])
+  const accountBtnRef = useRef<HTMLButtonElement | null>(null)
+  const focusAccount = useCallback(() => accountBtnRef.current?.focus(), [])
 
   /** Did OUR opening of a dialog cause the pause? Only then does closing resume. */
   const autoPausedRef = useRef(false)
@@ -294,6 +299,13 @@ export function Play() {
     setScoresOpen(true)
   }, [livePhase, press])
 
+  /** The Ducker ID account dialog follows the same rule: no reading it mid-fall. */
+  const openAccount = useCallback(() => {
+    autoPausedRef.current = shouldAutoPause(livePhase())
+    if (autoPausedRef.current) press('pause')
+    setAccountOpen(true)
+  }, [livePhase, press])
+
   /**
    * Closing a dialog undoes the pause that opening it caused -- and only that one.
    *
@@ -305,6 +317,7 @@ export function Play() {
   const closeDialog = useCallback(() => {
     setSettingsOpen(false)
     setScoresOpen(false)
+    setAccountOpen(false)
     if (!autoPausedRef.current) return
     autoPausedRef.current = false
     // Read the live phase again: the round can only be `paused` here, but a future
@@ -366,6 +379,8 @@ export function Play() {
         >
           <Icon name="sliders" />
         </button>
+        {/* Renders nothing unless Ducker ID sign-in is configured (ADR-0018). */}
+        <AccountButton onOpen={openAccount} buttonRef={accountBtnRef} />
         <button
           type="button"
           className="icon-btn"
@@ -451,6 +466,7 @@ export function Play() {
       {settingsOpen ? (
         <SettingsScreen onClose={closeDialog} onFocusFallback={focusSettings} />
       ) : null}
+      {accountOpen ? <AccountDialog onClose={closeDialog} onFocusFallback={focusAccount} /> : null}
       {scoresOpen ? (
         <HighScoresScreen
           onClose={closeDialog}

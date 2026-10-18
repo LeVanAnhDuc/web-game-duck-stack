@@ -2,7 +2,7 @@
 
 > **Trả lời:** Sản phẩm này là gì, cho ai, và **KHÔNG** làm gì?
 > **Trạng thái:** 🟢 đủ
-> **Cập nhật:** 2026-09-03 · commit d171af7
+> **Cập nhật:** 2026-10-04
 > **Cập nhật khi:** định vị đổi · thêm/bớt một Non-Goal · trần chi phí đổi
 
 <!-- CÁCH ĐIỀN
@@ -20,7 +20,7 @@ KHÔNG chứa: danh sách tính năng (-> 02-requirements/scope.md), ngưỡng k
 ## 1. Một câu định vị
 
 Duck Stack là bản Tetris đúng chuẩn Modern Guideline chạy hoàn toàn trong browser,
-cho người chơi đã quen cảm giác điều khiển của Tetr.io/Jstris — không cài đặt, không đăng nhập, không
+cho người chơi đã quen cảm giác điều khiển của Tetr.io/Jstris — không cài đặt, không bắt buộc đăng nhập, không
 cần mạng sau lần tải đầu.
 
 ## 2. Vấn đề đang giải
@@ -46,8 +46,9 @@ cảm ứng, nhưng không phải là nhóm được tối ưu cho tốc độ.
   authoritative và xử lý lag — đắt hơn toàn bộ phần game cộng lại.
 - **Không leaderboard server, không backend.** Trần chi phí là 0đ/tháng (mục 5), và
   một bảng xếp hạng online mà không chống được gian lận điểm thì tệ hơn là không có.
-- **Không hệ thống tài khoản riêng của game.** Khi cần định danh, nó sẽ đi qua Ducker
-  ID của ecosystem — dựng thêm một bảng user thứ hai là đi ngược hướng đó (ADR-0004).
+- **Không hệ thống tài khoản riêng của game.** Chỉ có đăng nhập Ducker ID **tùy chọn**
+  (ADR-0018): chỉ danh tính, không backend, không đồng bộ điểm hay thiết lập — dựng thêm
+  một bảng user thứ hai là đi ngược hướng đó (ADR-0004).
 - **Không tối ưu thi đấu tốc độ trên mobile.** Cảm ứng chơi đủ luật, nhưng mọi đánh
   đổi giữa hai nhóm sẽ nghiêng về bàn phím.
 - **Không các mode biến thể** (Puzzle, Cheese, Zen, Battle với AI). Sprint 40L và

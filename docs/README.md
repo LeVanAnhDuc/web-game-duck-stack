@@ -21,8 +21,8 @@
 | [`ux-reviews/2026-09-12-logs/p03-RR-07.md`](ux-reviews/2026-09-12-logs/p03-RR-07.md) | — | — | — |
 | [`ux-reviews/2026-09-12-logs/p05-RR-03-RR-08.md`](ux-reviews/2026-09-12-logs/p05-RR-03-RR-08.md) | — | — | — |
 | [`ux-reviews/2026-09-12-persona-review.md`](ux-reviews/2026-09-12-persona-review.md) | — | — | — |
-| [`decisions/`](decisions/README.md) | Tại sao lại làm thế này? | 17 ADR | mỗi quyết định kỹ thuật |
-| [`../.env.example`](../.env.example) | cần biến nào để chạy được dự án này? | ⚪ chưa áp dụng | code đọc một biến mới (process.env.X / os.getenv / os.Gete… |
+| [`decisions/`](decisions/README.md) | Tại sao lại làm thế này? | 18 ADR | mỗi quyết định kỹ thuật |
+| [`../.env.example`](../.env.example) | cần biến nào để chạy được dự án này? | 🟢 đủ | code đọc một biến mới (import.meta.env.VITE_* / process.en… |
 <!-- END:auto -->
 
 🔴 chưa điền · 🟡 một phần · 🟢 đủ · ⚪ chưa áp dụng

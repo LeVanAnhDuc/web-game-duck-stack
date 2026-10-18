@@ -1,7 +1,7 @@
 # ADR-0004 · Đặt storage và identity sau interface async, hoãn tích hợp Ducker ID
 
 > **Ngày:** 2026-09-03
-> **Trạng thái:** accepted
+> **Trạng thái:** accepted (một câu bị ADR-0018 thay)
 > **Liên quan:** FR-30 · FR-32 · FR-34 · NFR-REL-02 · NFR-REL-03 · ADR-0002
 
 ## 1. Bối cảnh

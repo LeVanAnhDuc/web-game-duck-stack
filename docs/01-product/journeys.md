@@ -2,7 +2,7 @@
 
 > **Trả lời:** Người dùng đi qua những luồng nào từ đầu đến cuối?
 > **Trạng thái:** 🟢 đủ
-> **Cập nhật:** 2026-09-03 · commit d171af7
+> **Cập nhật:** 2026-10-04
 > **Cập nhật khi:** có luồng người dùng mới · một luồng cũ đổi bản chất
 
 <!-- CÁCH ĐIỀN
@@ -110,3 +110,26 @@ dạng theo ngôn ngữ đang chọn.
 - Người chơi kỳ vọng so điểm với người khác — hiện chưa có, và không nên gợi ý là có.
 
 **Chức năng liên quan:** FR-31 → FR-34
+
+---
+
+## US-04 · Đăng nhập Ducker ID (tùy chọn, đang tắt ở bản deploy)
+
+**Bối cảnh:** Chỉ tồn tại khi build bật cờ `VITE_FEATURE_DUCKER_SIGN_IN` và đủ cấu hình
+Ducker ID — hiện chỉ ở máy local. Người chơi đã có tài khoản Ducker ID.
+
+**Các bước:**
+1. Bấm biểu tượng người ở thanh trên ("Sign in" / "Đăng nhập").
+2. Đăng nhập (hoặc xác nhận) ở Ducker ID, rồi được đưa về đúng màn hình cũ.
+3. Thấy avatar thay cho biểu tượng; bấm vào để mở hộp thoại tài khoản: tên, email, "Mở hồ
+   sơ Ducker ID" (tab mới), "Đăng xuất".
+
+**Kết quả mong đợi:** Ván chơi, điểm cao và thiết lập không đổi gì. Tải lại trang là về
+trạng thái chưa đăng nhập. Mở hộp thoại giữa ván thì ván tạm dừng, đóng thì chạy tiếp.
+
+**Điều gì có thể sai:**
+- Từ chối ở Ducker ID, `state` bị sửa, mở tab thứ hai giữa chừng, hoặc đổi code thất bại —
+  tất cả về chưa đăng nhập, im lặng, URL được dọn.
+- Thiếu một giá trị cấu hình hoặc issuer sai định dạng — không có nút, game chạy như cũ.
+
+**Chức năng liên quan:** FR-45

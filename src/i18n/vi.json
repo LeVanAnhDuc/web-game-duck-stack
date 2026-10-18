@@ -84,5 +84,10 @@
   "scores.listLabel": "Điểm cao, {n}",
   "scores.time": "thời gian",
   "scores.freshRow": "lượt vừa rồi",
-  "scores.clearWarning": "Việc này xoá vĩnh viễn mọi điểm trong bảng này. Bấm lần nữa để xác nhận."
+  "scores.clearWarning": "Việc này xoá vĩnh viễn mọi điểm trong bảng này. Bấm lần nữa để xác nhận.",
+  "account.signIn": "Đăng nhập",
+  "account.signingIn": "Đang đăng nhập…",
+  "account.menu": "Tài khoản Ducker ID",
+  "account.openProfile": "Mở hồ sơ Ducker ID",
+  "account.signOut": "Đăng xuất"
 }

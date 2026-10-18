@@ -2,7 +2,7 @@
 
 > **Trả lời:** Hệ thống có những chức năng nào, mỗi cái đang ở trạng thái gì?
 > **Trạng thái:** 🟢 đủ
-> **Cập nhật:** 2026-09-03 · commit d171af7
+> **Cập nhật:** 2026-10-04
 > **Cập nhật khi:** brainstorm ra chức năng mới (cấp FR mới) · một FR chuyển trạng thái
 
 <!-- CÁCH ĐIỀN
@@ -64,3 +64,4 @@ KHÔNG chứa: cách hiện thực, ngưỡng phi chức năng (-> nfr.md), lý 
 | FR-42 | Ba mức độ khó: dễ · vừa · khó, nhân vào đường cong gravity | US-02 | xong |
 | FR-43 | Tốc độ rơi tự đặt, thay hẳn đường cong theo cấp | US-02 | xong |
 | FR-44 | Bật/tắt nội suy di chuyển ngang | US-02 | xong |
+| FR-45 | Đăng nhập Ducker ID tùy chọn, chỉ danh tính (nút + hộp thoại tài khoản); sau cờ, tắt ở bản deploy | US-04 | xong (ẩn sau cờ) |
