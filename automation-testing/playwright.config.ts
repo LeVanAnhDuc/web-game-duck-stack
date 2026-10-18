@@ -28,6 +28,8 @@ const SIGN_IN = /e2e\/ducker-id\/sign-in\.e2e\.ts$/;
 export default defineConfig({
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : [["list"], ["html", { open: "never" }]],
   fullyParallel: true,
+  // Planned rounds play up to 30 pieces on the fake clock; that is real work for the browser, so a CI runner gets room.
+  timeout: 90_000,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   use: {
